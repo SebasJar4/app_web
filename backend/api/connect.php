@@ -16,8 +16,12 @@ final class DB
         }
     }
 
-    public function getConnection() {
+    public function getConnection()  {
         return $this->conn;
+    }
+
+    public function close () {
+      $this->conn->close();
     }
 }
 ?>

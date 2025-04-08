@@ -1087,7 +1087,7 @@ call add_nav (
   NULL,
   "Interfaz/penstaña donde todos los usuarios entran de primeras para ofrecer mis servicios",
   1,
-  "/home",
+  "Home",
   1
 );
 
@@ -1096,6 +1096,6 @@ call add_nav (
   NULL,
   "Interfaz donde vamos a poner nuestras categorias de servicios",
   1,
-  "/Services",
+  "Services",
   1
 );
