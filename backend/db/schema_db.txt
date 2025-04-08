@@ -1,0 +1,69 @@
+Table state_user {
+  state_user_id int [pk]
+  state_user_name varchar(20)
+  state_user_description varchar(300)
+}
+
+Table gender {
+  gender_id int [pk]
+  gender_name varchar(20)
+  gender_description varchar(300)
+}
+
+Table user {
+  user_id int [pk]
+  user_name varchar(30)
+  user_mail varchar(100)
+  user_tel  varchar(10)
+  state_user_id int [ref: > state_user.state_user_id ]  
+  gender_id int [ref: > gender.gender_id]
+}
+
+Table type_change {
+  type_change_id int [pk]
+  type_change_name varchar(6)
+  type_change_description varchar(300)
+}
+
+Table historial_user_into {
+  historial_user_into_id int [pk]
+  user_name varchar(30)
+  user_mail varchar(100)
+  user_tel  varchar(10)
+  state_user_id int
+  gender_id int
+}
+
+Table historial_user_update {
+  historial_user_update_id int [pk]
+  old_user_name varchar(30)
+  old_user_mail varchar(100)
+  old_user_tel  varchar(10)
+  old_state_user_id int
+  old_gender_id int
+  new_user_name varchar(30)
+  new_user_mail varchar(100)
+  new_user_tel  varchar(10)
+  new_state_user_id int
+  new_gender_id int
+}
+
+Table historial_user_delete {
+  historial_user_delete_id int [pk]
+  user_name varchar(30)
+  user_mail varchar(100)
+  user_tel  varchar(10)
+  state_user_id int
+  gender_id int
+}
+
+Table user_historials {
+  user_historials_id int [pk]
+  changed_user_id int [ref:>user.user_id]
+  maker_user_id int [ref:> user.user_id]
+  type_change_id int [ref:> type_change.type_change_id]
+  user_historials_date datetime
+  historial_user_into_id int [ref:> historial_user_into.historial_user_into_id]
+  historial_user_update_id int [ref:> historial_user_update.historial_user_update_id]
+  historial_user_delete_id int [ref:> historial_user_delete.historial_user_delete_id]
+}
