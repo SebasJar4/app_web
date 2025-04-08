@@ -11,8 +11,11 @@ class ControllerNav
     }
 
     public function getNav() {
-        $query = "call  get_nav_by_state("+1+")";
-        $result = $this->conn->query($query);
+        $stmt = $this->conn->prepare("CALL get_nav_by_state(?)");
+        $state = 1;
+        $stmt->bind_param("i", $state);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         $datos = [];
 
