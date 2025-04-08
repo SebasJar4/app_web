@@ -80,8 +80,14 @@ CREATE TABLE `nav` (
   `service_id` INT,
   `nav_description` VARCHAR(300),
   `state_objets_id` INT,
-  `url` VARCHAR(100)  -- nuevo campo
-);
+  `url` VARCHAR(100),
+  `imgs_id` INT,  -- Clave foránea que apunta a una imagen
+
+  CONSTRAINT fk_imgs_id FOREIGN KEY (`imgs_id`) REFERENCES `imgs`(`imgs_id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
 
 
 CREATE TABLE `historial_nav` (

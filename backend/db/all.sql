@@ -73,15 +73,20 @@ CREATE TABLE `service` (
   `service_descuento` int,
   `state_objets_id` int
 );
-
 CREATE TABLE `nav` (
   `nav_id` INT AUTO_INCREMENT PRIMARY KEY,
   `nav_name` VARCHAR(50),
-  `url` VARCHAR(100),  -- nuevo campo
   `service_id` INT,
   `nav_description` VARCHAR(300),
-  `state_objets_id` INT
-);
+  `state_objets_id` INT,
+  `url` VARCHAR(100),
+  `imgs_id` INT,  -- Clave foránea que apunta a una imagen
+
+  CONSTRAINT fk_imgs_id FOREIGN KEY (`imgs_id`) REFERENCES `imgs`(`imgs_id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
 
 
 CREATE TABLE `historial_nav` (
@@ -277,7 +282,6 @@ ALTER TABLE `historial_products` ADD FOREIGN KEY (`old_state_objets_id`) REFEREN
 
 
 
-
 DELIMITER //
 
 -- Agregar nav
@@ -287,14 +291,15 @@ CREATE PROCEDURE add_nav (
   IN p_nav_description VARCHAR(300),
   IN p_state_objets_id INT,
   IN p_url VARCHAR(100),
+  IN p_imgs_id INT,
   IN p_maker_user_id INT
 )
 BEGIN
   INSERT INTO nav (
-    nav_name, service_id, nav_description, state_objets_id, url
+    nav_name, service_id, nav_description, state_objets_id, url, imgs_id
   )
   VALUES (
-    p_nav_name, p_service_id, p_nav_description, p_state_objets_id, p_url
+    p_nav_name, p_service_id, p_nav_description, p_state_objets_id, p_url, p_imgs_id
   );
 
   INSERT INTO historial_nav (
@@ -311,8 +316,6 @@ BEGIN
   );
 END //
 
-
-DELIMITER //
 -- Editar nav
 CREATE PROCEDURE edit_nav (
   IN p_nav_id INT,
@@ -321,6 +324,7 @@ CREATE PROCEDURE edit_nav (
   IN p_new_nav_description VARCHAR(300),
   IN p_new_state_objets_id INT,
   IN p_new_url VARCHAR(100),
+  IN p_new_imgs_id INT,
   IN p_maker_user_id INT
 )
 BEGIN
@@ -338,7 +342,8 @@ BEGIN
       service_id = p_new_service_id,
       nav_description = p_new_nav_description,
       state_objets_id = p_new_state_objets_id,
-      url = p_new_url
+      url = p_new_url,
+      imgs_id = p_new_imgs_id
   WHERE nav_id = p_nav_id;
 
   INSERT INTO historial_nav (
@@ -354,7 +359,6 @@ BEGIN
     p_new_nav_name, p_new_service_id, p_new_nav_description, p_new_state_objets_id
   );
 END //
-
 
 -- Eliminación lógica de nav
 CREATE PROCEDURE delete_nav_logico (
@@ -394,36 +398,60 @@ CREATE PROCEDURE get_nav_by_id (
   IN p_nav_id INT
 )
 BEGIN
-  SELECT *
-  FROM nav
-  WHERE nav_id = p_nav_id;
+  SELECT * FROM nav WHERE nav_id = p_nav_id;
 END //
 
--- Buscar nav por nombre (like)
+-- Buscar nav por nombre (LIKE)
 CREATE PROCEDURE get_nav_by_name (
   IN p_nav_name VARCHAR(50)
 )
 BEGIN
-  SELECT *
-  FROM nav
-  WHERE nav_name LIKE CONCAT('%', p_nav_name, '%');
+  SELECT * FROM nav WHERE nav_name LIKE CONCAT('%', p_nav_name, '%');
 END //
 
 -- Obtener navs por estado (con opción 'all')
 CREATE PROCEDURE get_nav_by_state (
-  IN p_state_objets_id VARCHAR(10) -- puede ser 'all'
+  IN p_state_objets_id VARCHAR(10)
 )
 BEGIN
   IF p_state_objets_id = 'all' THEN
     SELECT * FROM nav;
   ELSE
-    SELECT *
-    FROM nav
-    WHERE state_objets_id = CAST(p_state_objets_id AS UNSIGNED);
+    SELECT * FROM nav WHERE state_objets_id = CAST(p_state_objets_id AS UNSIGNED);
   END IF;
 END //
 
 DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE get_nav_by_state_with_img (
+  IN p_state_objets_id VARCHAR(10)
+)
+BEGIN
+  IF p_state_objets_id = 'all' THEN
+    SELECT 
+      nav.*, 
+      img.img_id, 
+      img.img_name, 
+      img.img_url
+    FROM nav
+    LEFT JOIN img ON nav.img_id = img.img_id;
+  ELSE
+    SELECT 
+      nav.*, 
+      img.img_id, 
+      img.img_name, 
+      img.img_url
+    FROM nav
+    LEFT JOIN img ON nav.img_id = img.img_id
+    WHERE nav.state_objets_id = CAST(p_state_objets_id AS UNSIGNED);
+  END IF;
+END //
+
+DELIMITER ;
+
 
 
 
@@ -1000,13 +1028,25 @@ BEGIN
   );
 END //
 
--- Obtener servicios activos
+DELIMITER //
+
 CREATE PROCEDURE get_active_services ()
 BEGIN
-  SELECT *
-  FROM service
-  WHERE state_objets_id = 1;
+  SELECT 
+    s.servicie_id,
+    s.service_name,
+    s.service_description,
+    s.service_descuento,
+    i.imgs_id,
+    i.imgs_name,
+    i.imgs_url
+  FROM service s
+  INNER JOIN imgs i ON s.imgs_id = i.imgs_id
+  WHERE s.state_objets_id = 1 AND i.state_objets_id = 1;
 END //
+
+DELIMITER //
+
 
 -- Obtener servicios por estado (incluye 'all')
 CREATE PROCEDURE get_state_services ( 
@@ -1042,6 +1082,23 @@ BEGIN
   FROM service
   WHERE service_descuento BETWEEN p_min_discount AND p_max_discount
     AND state_objets_id = 1;
+END //
+
+DELIMITER ;
+DELIMITER //
+
+CREATE PROCEDURE add_img (
+  IN p_imgs_name VARCHAR(30),
+  IN p_imgs_url VARCHAR(200),
+  IN p_imgs_description VARCHAR(300),
+  IN p_state_objets_id INT
+)
+BEGIN
+  INSERT INTO imgs (
+    imgs_name, imgs_url, imgs_description, state_objets_id
+  ) VALUES (
+    p_imgs_name, p_imgs_url, p_imgs_description, p_state_objets_id
+  );
 END //
 
 DELIMITER ;
@@ -1082,20 +1139,160 @@ call add_user(
   NULL
 );
 
+call add_img(
+   "Home_icon"
+  ,"/assets/icons/Home.svg"
+  ,"Icono que se pondrá en el nav para denotar el home"
+  ,1
+);
+
+call add_img(
+   "Services_icon"
+  ,"/assets/icons/Services.svg"
+  ,"Icono que se pondrá en el nav para denotar los Services"
+  ,1
+);
+
 call add_nav (
   "Home",
   NULL,
-  "Interfaz/penstaña donde todos los usuarios entran de primeras para ofrecer mis servicios",
-  1,
-  "Home",
-  1
+  "Interfaz/penstaña donde todos los usuarios entran de primeras para ofrecer mis servicios"
+  ,1
+  ,"Home"
+  ,1
+  ,1
 );
 
 call add_nav (
   "Services",
   NULL,
-  "Interfaz donde vamos a poner nuestras categorias de servicios",
+  "Interfaz donde vamos a poner nuestras categorias de servicios"
+  ,1
+  ,"Services"
+  ,2
+  ,1
+);
+
+call add_img (
+   "camera_1"
+  ,"/assets/Producst_img/camera1.webp"
+  ,"Camara bonita"
+  ,1
+);
+
+call add_img (
+   "camera_2"
+  ,"/assets/Producst_img/camera2.avif"
+  ,"Camara bonita"
+  ,1
+);
+
+call add_img (
+   "camera_3"
+  ,"/assets/Producst_img/camera3.png"
+  ,"Camara bonita"
+  ,1
+);
+
+call add_img (
+   "camera_4"
+  ,"/assets/Producst_img/camera4.png"
+  ,"Camara bonita"
+  ,1
+);
+
+call add_img (
+   "camera + sensor de movimiento"
+  ,"/assets/Producst_img/Sensor_movimiento.jpg"
+  ,"Camara bonita"
+  ,1
+);
+
+call add_product (
+  "camara 360 grados"
+  ,3
+  ,"Camara que gira en 360 deg ideal para cubrir zonas de amplio espacio"
+  ,"30000"
+  ,1
+  ,1
+);
+
+call add_product (
+  "camara tipo cabeza 180 deg"
+  ,4
+  ,"Camara ideal para cuartos no muy grandes y que no tienen una tn amplia covertura"
+  ,"22000"
+  ,1
+  ,1
+);
+
+call add_product (
+  "camara tipo cabeza 180 deg"
+  ,5
+  ,"Camara ideal para cuartos no muy grandes y que no tienen una tn amplia covertura"
+  ,"22000"
+  ,1
+  ,1
+);
+
+
+call add_product (
+  "Camara 360 deg :D"
+  ,6
+  ,"Camara de alta calidad ideal para cuartos no muy grandes y que no tienen una tn amplia covertura esta bonita :D"
+  ,"45000"
+  ,1
+  ,1
+);
+
+call add_product (
+  "Camara 180 + sensor de proximidad :3"
+  ,7
+  ,"Camara de alta calidad ideal para cuartos no muy grandes y que no tienen una tn amplia covertura esta bonita :D"
+  ,"50000"
+  ,1
+  ,1
+);
+
+call add_service (
+  "Sistemas de monitoreo",
+  "Se ofrece el servicio de instalacion en su vivienda, empreza, recinto, tienda, etc... la instalacion de camaras y sensores",
+  7,
+  10,
+  1
+);
+
+call add_service_product (
+  NULL,
   1,
-  "Services",
+  1,
+  1
+);
+
+call add_service_product (
+  NULL,
+  1,
+  2,
+  1
+);
+
+call add_service_product (
+  NULL,
+  1,
+  3,
+  1
+);
+
+call add_service_product (
+  NULL,
+  1,
+  4,
+  1
+);
+
+call add_service_product (
+  NULL,
+  1,
+  5,
   1
 );
