@@ -1,13 +1,17 @@
 export const getNavs = async () => {
-    try {
-      const response = await fetch("http://192.168.1.X/api/nav.php"); // Cambia la IP
-      if (!response.ok) throw new Error("Error al obtener los navs");
-  
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error:", error);
-      return [];
-    }
-  };
-  
+  try {
+    console.log("→ Realizando fetch...");
+    const response = await fetch("http://192.168.20.24/project_web/backend/api/getNav.php");
+
+    console.log("→ Response status:", response.status);
+    if (!response.ok) throw new Error("Error al obtener los navs");
+
+    const data = await response.json();
+    console.log("→ Datos recibidos:", data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en fetch:", error);
+    return [];
+  }
+};
