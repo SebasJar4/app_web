@@ -1,0 +1,63 @@
+Table state_user {
+  state_user_id int [pk]
+  state_user_name varchar(20)
+  state_user_description varchar(300)
+}
+
+Table gender {
+  gender_id int [pk]
+  gender_name varchar(20)
+  gender_description varchar(300)
+}
+
+Table user {
+  user_id int [pk]
+  user_name varchar(30)
+  user_mail varchar(100)
+  user_tel  varchar(10)
+  state_user_id int [ref: > state_user.state_user_id ]  
+  gender_id int [ref: > gender.gender_id]
+}
+
+Table type_change {
+  type_change_id int [pk]
+  type_change_name varchar(6)
+  type_change_description varchar(300)
+}
+
+Table user_historial {
+  user_historial_id int [pk]
+  changed_user_id int [ref:>user.user_id]
+  maker_user_id int [ref:> user.user_id]
+  type_change_id int [ref:> type_change.type_change_id]
+  user_historial_date datetime
+  user_historial_description varchar(300)
+  old_user_name varchar(30)
+  old_user_mail varchar(100)
+  old_user_tel  varchar(10)
+  old_state_user_id int
+  old_gender_id int 
+  new_user_name varchar(30)
+  new_user_mail varchar(100)
+  new_user_tel  varchar(10)
+  new_state_user_id int  
+  new_gender_id int 
+}
+
+Table state_objets {
+  state_objets_id int [pk]
+  state_objets_name varchar(20)
+  state_objets_description varchar(300)
+}
+
+Table nav {
+  nav_id int [pk]
+  nav_name varchar(50)
+  nav_url varchar(200)
+  nav_description varchar(300)
+  state_objets_id int [ref:> state_objets.state_objets_id]
+}
+
+Table  {
+
+}

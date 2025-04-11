@@ -1,4 +1,3 @@
-
 -- Eliminación y creación de base de datos
 DROP DATABASE IF EXISTS `your_place_safed`;
 CREATE DATABASE IF NOT EXISTS `your_place_safed`;
@@ -6,73 +5,75 @@ USE `your_place_safed`;
 
 -- Tablas base
 CREATE TABLE `state_user` (
-  `state_user_id` int AUTO_INCREMENT PRIMARY KEY,
-  `state_user_name` varchar(20),
-  `state_user_description` varchar(300)
+  `state_user_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `state_user_name` VARCHAR(20),
+  `state_user_description` VARCHAR(300)
 );
 
 CREATE TABLE `gender` (
-  `gender_id` int AUTO_INCREMENT PRIMARY KEY,
-  `gender_name` varchar(20),
-  `gender_description` varchar(300)
+  `gender_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `gender_name` VARCHAR(20),
+  `gender_description` VARCHAR(300)
 );
 
 CREATE TABLE `user` (
-  `user_id` int AUTO_INCREMENT PRIMARY KEY,
-  `user_name` varchar(30),
-  `user_mail` varchar(100),
-  `user_tel` varchar(10),
-  `state_user_id` int,
-  `gender_id` int
+  `user_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_name` VARCHAR(30),
+  `user_mail` VARCHAR(100),
+  `user_tel` VARCHAR(10),
+  `user_password` VARCHAR(60),
+  `state_user_id` INT,
+  `gender_id` INT
 );
 
 CREATE TABLE `type_change` (
-  `type_change_id` int AUTO_INCREMENT PRIMARY KEY,
-  `type_change_name` varchar(6),
-  `type_change_description` varchar(300)
+  `type_change_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `type_change_name` VARCHAR(6),
+  `type_change_description` VARCHAR(300)
 );
 
 CREATE TABLE `user_historial` (
-  `user_historial_id` int AUTO_INCREMENT PRIMARY KEY,
-  `changed_user_id` int,
-  `maker_user_id` int,
-  `type_change_id` int,
-  `user_historial_date` datetime,
-  `user_historial_description` varchar(300),
-  `old_user_name` varchar(30),
-  `old_user_mail` varchar(100),
-  `old_user_tel` varchar(10),
-  `old_state_user_id` int,
-  `old_gender_id` int,
-  `new_user_name` varchar(30),
-  `new_user_mail` varchar(100),
-  `new_user_tel` varchar(10),
-  `new_state_user_id` int,
-  `new_gender_id` int
+  `user_historial_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `changed_user_id` INT,
+  `maker_user_id` INT,
+  `type_change_id` INT,
+  `user_historial_date` DATETIME,
+  `user_historial_description` VARCHAR(300),
+  `old_user_name` VARCHAR(30),
+  `old_user_mail` VARCHAR(100),
+  `old_user_tel` VARCHAR(10),
+  `old_state_user_id` INT,
+  `old_gender_id` INT,
+  `new_user_name` VARCHAR(30),
+  `new_user_mail` VARCHAR(100),
+  `new_user_tel` VARCHAR(10),
+  `new_state_user_id` INT,
+  `new_gender_id` INT
 );
 
 CREATE TABLE `state_objets` (
-  `state_objets_id` int AUTO_INCREMENT PRIMARY KEY,
-  `state_objets_name` varchar(20),
-  `state_objets_description` varchar(300)
+  `state_objets_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `state_objets_name` VARCHAR(20),
+  `state_objets_description` VARCHAR(300)
 );
 
 CREATE TABLE `imgs` (
-  `imgs_id` int AUTO_INCREMENT PRIMARY KEY,
-  `imgs_name` varchar(30),
-  `imgs_url` varchar(200),
-  `imgs_description` varchar(300),
-  `state_objets_id` int
+  `imgs_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `imgs_name` VARCHAR(30),
+  `imgs_url` VARCHAR(200),
+  `imgs_description` VARCHAR(300),
+  `state_objets_id` INT
 );
 
 CREATE TABLE `service` (
-  `servicie_id` int AUTO_INCREMENT PRIMARY KEY,
-  `service_name` varchar(40),
-  `service_description` varchar(300),
-  `imgs_id` int,
-  `service_descuento` int,
-  `state_objets_id` int
+  `servicie_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `service_name` VARCHAR(40),
+  `service_description` VARCHAR(300),
+  `imgs_id` INT,
+  `service_descuento` INT,
+  `state_objets_id` INT
 );
+
 CREATE TABLE `nav` (
   `nav_id` INT AUTO_INCREMENT PRIMARY KEY,
   `nav_name` VARCHAR(50),
@@ -80,207 +81,152 @@ CREATE TABLE `nav` (
   `nav_description` VARCHAR(300),
   `state_objets_id` INT,
   `url` VARCHAR(100),
-  `imgs_id` INT,  -- Clave foránea que apunta a una imagen
+  `imgs_id` INT,
 
   CONSTRAINT fk_imgs_id FOREIGN KEY (`imgs_id`) REFERENCES `imgs`(`imgs_id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-
-
 CREATE TABLE `historial_nav` (
-  `historial_nav_id` int AUTO_INCREMENT PRIMARY KEY,
-  `maker_user_id` int,
-  `changed_nav_id` int,
-  `type_change_id` int,
-  `historial_nav_date` datetime,
-  `historial_nav_description` varchar(300),
-  `new_nav_name` varchar(50),
-  `new_service_id` int,
-  `new_nav_description` varchar(300),
-  `new_state_objets_id` int,
-  `old_nav_name` varchar(50),
-  `old_service_id` int,
-  `old_nav_description` varchar(300),
-  `old_state_objets_id` int
+  `historial_nav_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `maker_user_id` INT,
+  `changed_nav_id` INT,
+  `type_change_id` INT,
+  `historial_nav_date` DATETIME,
+  `historial_nav_description` VARCHAR(300),
+  `new_nav_name` VARCHAR(50),
+  `new_service_id` INT,
+  `new_nav_description` VARCHAR(300),
+  `new_state_objets_id` INT,
+  `old_nav_name` VARCHAR(50),
+  `old_service_id` INT,
+  `old_nav_description` VARCHAR(300),
+  `old_state_objets_id` INT
 );
 
 CREATE TABLE `historial_service` (
-  `historial_service_id` int AUTO_INCREMENT PRIMARY KEY,
-  `maker_user_id` int,
-  `changed_service_id` int,
-  `type_change_id` int,
-  `historial_service_date` datetime,
-  `historial_service_description` varchar(300),
-  `new_service_name` varchar(40),
-  `new_service_description` varchar(300),
-  `new_imgs_id` int,
-  `new_service_descuento` int,
-  `new_state_objets_id` int,
-  `old_service_name` varchar(40),
-  `old_service_description` varchar(300),
-  `old_imgs_id` int,
-  `old_service_descuento` int,
-  `old_state_objets_id` int
+  `historial_service_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `maker_user_id` INT,
+  `changed_service_id` INT,
+  `type_change_id` INT,
+  `historial_service_date` DATETIME,
+  `historial_service_description` VARCHAR(300),
+  `new_service_name` VARCHAR(40),
+  `new_service_description` VARCHAR(300),
+  `new_imgs_id` INT,
+  `new_service_descuento` INT,
+  `new_state_objets_id` INT,
+  `old_service_name` VARCHAR(40),
+  `old_service_description` VARCHAR(300),
+  `old_imgs_id` INT,
+  `old_service_descuento` INT,
+  `old_state_objets_id` INT
 );
 
 CREATE TABLE `products` (
-  `products_id` int AUTO_INCREMENT PRIMARY KEY,
-  `producst_name` varchar(30),
-  `imgs_id` int,
-  `products_description` varchar(300),
-  `products_precio` varchar(9),
-  `state_objets_id` int
+  `products_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `producst_name` VARCHAR(50),
+  `imgs_id` INT,
+  `products_description` VARCHAR(300),
+  `products_precio` VARCHAR(9),
+  `state_objets_id` INT
 );
 
 CREATE TABLE `service_products` (
-  `service_products_id` int AUTO_INCREMENT PRIMARY KEY,
-  `imgs_id` int,
-  `service_id` int,
-  `products_id` int,
-  `state_objets_id` int
+  `service_products_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `imgs_id` INT,
+  `service_id` INT,
+  `products_id` INT,
+  `state_objets_id` INT
 );
 
 CREATE TABLE `historial_service_products` (
-  `historial_service_id` int AUTO_INCREMENT PRIMARY KEY,
-  `maker_user_id` int,
-  `changed_service_products_id` int,
-  `type_change_id` int,
-  `historial_service_date` datetime,
-  `historial_service_description` varchar(300),
-  `new_imgs_id` int,
-  `new_service_id` int,
-  `new_products_id` int,
-  `new_state_objets_id` int,
-  `old_imgs_id` int,
-  `old_service_id` int,
-  `old_products_id` int,
-  `old_state_objets_id` int
+  `historial_service_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `maker_user_id` INT,
+  `changed_service_products_id` INT,
+  `type_change_id` INT,
+  `historial_service_date` DATETIME,
+  `historial_service_description` VARCHAR(300),
+  `new_imgs_id` INT,
+  `new_service_id` INT,
+  `new_products_id` INT,
+  `new_state_objets_id` INT,
+  `old_imgs_id` INT,
+  `old_service_id` INT,
+  `old_products_id` INT,
+  `old_state_objets_id` INT
 );
 
 CREATE TABLE `historial_products` (
-  `historial_products_id` int AUTO_INCREMENT PRIMARY KEY,
-  `maker_user_id` int,
-  `changed_historial_products_id` int,
-  `type_change_id` int,
-  `historial_products_date` datetime,
-  `historial_products_description` varchar(300),
-  `new_producst_name` varchar(30),
-  `new_imgs_id` int,
-  `new_products_description` varchar(300),
-  `new_products_precio` varchar(9),
-  `new_state_objets_id` int,
-  `old_producst_name` varchar(30),
-  `old_imgs_id` int,
-  `old_products_description` varchar(300),
-  `old_products_precio` varchar(9),
-  `old_state_objets_id` int
+  `historial_products_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `maker_user_id` INT,
+  `changed_historial_products_id` INT,
+  `type_change_id` INT,
+  `historial_products_date` DATETIME,
+  `historial_products_description` VARCHAR(300),
+  `new_producst_name` VARCHAR(50),
+  `new_imgs_id` INT,
+  `new_products_description` VARCHAR(300),
+  `new_products_precio` VARCHAR(9),
+  `new_state_objets_id` INT,
+  `old_producst_name` VARCHAR(50),
+  `old_imgs_id` INT,
+  `old_products_description` VARCHAR(300),
+  `old_products_precio` VARCHAR(9),
+  `old_state_objets_id` INT
 );
 
-
-
 ALTER TABLE `user` ADD FOREIGN KEY (`state_user_id`) REFERENCES `state_user` (`state_user_id`);
-
 ALTER TABLE `user` ADD FOREIGN KEY (`gender_id`) REFERENCES `gender` (`gender_id`);
-
 ALTER TABLE `user_historial` ADD FOREIGN KEY (`changed_user_id`) REFERENCES `user` (`user_id`);
-
 ALTER TABLE `user_historial` ADD FOREIGN KEY (`maker_user_id`) REFERENCES `user` (`user_id`);
-
 ALTER TABLE `user_historial` ADD FOREIGN KEY (`type_change_id`) REFERENCES `type_change` (`type_change_id`);
-
 ALTER TABLE `user_historial` ADD FOREIGN KEY (`old_state_user_id`) REFERENCES `state_user` (`state_user_id`);
-
 ALTER TABLE `user_historial` ADD FOREIGN KEY (`old_gender_id`) REFERENCES `gender` (`gender_id`);
-
 ALTER TABLE `user_historial` ADD FOREIGN KEY (`new_state_user_id`) REFERENCES `state_user` (`state_user_id`);
-
 ALTER TABLE `user_historial` ADD FOREIGN KEY (`new_gender_id`) REFERENCES `gender` (`gender_id`);
-
 ALTER TABLE `service` ADD FOREIGN KEY (`imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `service` ADD FOREIGN KEY (`state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `nav` ADD FOREIGN KEY (`service_id`) REFERENCES `service` (`servicie_id`);
-
 ALTER TABLE `nav` ADD FOREIGN KEY (`state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `imgs` ADD FOREIGN KEY (`state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `historial_nav` ADD FOREIGN KEY (`maker_user_id`) REFERENCES `user` (`user_id`);
-
 ALTER TABLE `historial_nav` ADD FOREIGN KEY (`changed_nav_id`) REFERENCES `nav` (`nav_id`);
-
 ALTER TABLE `historial_nav` ADD FOREIGN KEY (`type_change_id`) REFERENCES `type_change` (`type_change_id`);
-
 ALTER TABLE `historial_nav` ADD FOREIGN KEY (`new_service_id`) REFERENCES `service` (`servicie_id`);
-
 ALTER TABLE `historial_nav` ADD FOREIGN KEY (`new_state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `historial_nav` ADD FOREIGN KEY (`old_service_id`) REFERENCES `service` (`servicie_id`);
-
 ALTER TABLE `historial_nav` ADD FOREIGN KEY (`old_state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `historial_service` ADD FOREIGN KEY (`maker_user_id`) REFERENCES `user` (`user_id`);
-
 ALTER TABLE `historial_service` ADD FOREIGN KEY (`changed_service_id`) REFERENCES `service` (`servicie_id`);
-
 ALTER TABLE `historial_service` ADD FOREIGN KEY (`type_change_id`) REFERENCES `type_change` (`type_change_id`);
-
 ALTER TABLE `historial_service` ADD FOREIGN KEY (`new_imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `historial_service` ADD FOREIGN KEY (`old_imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `service_products` ADD FOREIGN KEY (`imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `service_products` ADD FOREIGN KEY (`service_id`) REFERENCES `service` (`servicie_id`);
-
 ALTER TABLE `service_products` ADD FOREIGN KEY (`products_id`) REFERENCES `products` (`products_id`);
-
 ALTER TABLE `service_products` ADD FOREIGN KEY (`state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`maker_user_id`) REFERENCES `user` (`user_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`changed_service_products_id`) REFERENCES `service_products` (`service_products_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`type_change_id`) REFERENCES `type_change` (`type_change_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`new_imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`new_service_id`) REFERENCES `service` (`servicie_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`new_products_id`) REFERENCES `products` (`products_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`new_state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`old_imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`old_service_id`) REFERENCES `service` (`servicie_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`old_products_id`) REFERENCES `products` (`products_id`);
-
 ALTER TABLE `historial_service_products` ADD FOREIGN KEY (`old_state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `products` ADD FOREIGN KEY (`imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `products` ADD FOREIGN KEY (`state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `historial_products` ADD FOREIGN KEY (`maker_user_id`) REFERENCES `user` (`user_id`);
-
 ALTER TABLE `historial_products` ADD FOREIGN KEY (`changed_historial_products_id`) REFERENCES `products` (`products_id`);
-
 ALTER TABLE `historial_products` ADD FOREIGN KEY (`type_change_id`) REFERENCES `type_change` (`type_change_id`);
-
 ALTER TABLE `historial_products` ADD FOREIGN KEY (`new_imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `historial_products` ADD FOREIGN KEY (`new_state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
 ALTER TABLE `historial_products` ADD FOREIGN KEY (`old_imgs_id`) REFERENCES `imgs` (`imgs_id`);
-
 ALTER TABLE `historial_products` ADD FOREIGN KEY (`old_state_objets_id`) REFERENCES `state_objets` (`state_objets_id`);
-
-
 
 DELIMITER //
 
@@ -421,45 +367,45 @@ BEGIN
   END IF;
 END //
 
-DELIMITER ;
 
-
-DELIMITER //
-
-CREATE PROCEDURE get_nav_by_state_with_img (
+CREATE PROCEDURE get_nav_by_state_with_imgs (
   IN p_state_objets_id VARCHAR(10)
 )
 BEGIN
   IF p_state_objets_id = 'all' THEN
     SELECT 
       nav.*, 
-      img.img_id, 
-      img.img_name, 
-      img.img_url
+      imgs.imgs_id, 
+      imgs.imgs_name, 
+      imgs.imgs_url
     FROM nav
-    LEFT JOIN img ON nav.img_id = img.img_id;
+    LEFT JOIN imgs ON nav.imgs_id = imgs.imgs_id;
   ELSE
     SELECT 
       nav.*, 
-      img.img_id, 
-      img.img_name, 
-      img.img_url
+      imgs.imgs_id, 
+      imgs.imgs_name, 
+      imgs.imgs_url
     FROM nav
-    LEFT JOIN img ON nav.img_id = img.img_id
+    LEFT JOIN imgs ON nav.imgs_id = imgs.imgs_id
     WHERE nav.state_objets_id = CAST(p_state_objets_id AS UNSIGNED);
   END IF;
 END //
 
-DELIMITER ;
-
-
-
-
-
-DELIMITER //
+CREATE PROCEDURE get_nav_active_with_imgs ()
+BEGIN
+  SELECT 
+    nav.*, 
+    imgs.imgs_id, 
+    imgs.imgs_name, 
+    imgs.imgs_url
+  FROM nav
+  LEFT JOIN imgs ON nav.imgs_id = imgs.imgs_id
+  WHERE nav.state_objets_id = 1;
+END //
 
 CREATE PROCEDURE add_product (
-  IN p_producst_name VARCHAR(30),
+  IN p_producst_name VARCHAR(50),
   IN p_imgs_id INT,
   IN p_products_description VARCHAR(300),
   IN p_products_precio VARCHAR(9),
@@ -488,7 +434,7 @@ END //
 
 CREATE PROCEDURE edit_product (
   IN p_products_id INT,
-  IN p_new_producst_name VARCHAR(30),
+  IN p_new_producst_name VARCHAR(50),
   IN p_new_imgs_id INT,
   IN p_new_products_description VARCHAR(300),
   IN p_new_products_precio VARCHAR(9),
@@ -573,7 +519,7 @@ END //
 -- ----------------------------------------------------
 
 CREATE PROCEDURE get_product_by_name (
-  IN p_producst_name VARCHAR(30)
+  IN p_producst_name VARCHAR(50)
 )
 BEGIN
   SELECT * FROM products
@@ -594,26 +540,16 @@ BEGIN
   END IF;
 END //
 
-DELIMITER ;
-
------                                 ----------------------------------------------
-
-DELIMITER //
-
 CREATE PROCEDURE get_products_by_price_range (
   IN p_min_price DECIMAL(9,2),
   IN p_max_price DECIMAL(9,2)
 )
 BEGIN
   SELECT * FROM products
-  WHERE CAST(products_precio AS DECIMAL(9,2)) BETWEEN p_min_price AND p_max_price
+  WHERE state_objets_id = 1 AND CAST(products_precio AS DECIMAL(9,2)) BETWEEN p_min_price AND p_max_price
   ORDER BY CAST(products_precio AS DECIMAL(9,2));
 END //
 
-DELIMITER ;
-
-
-DELIMITER //
 
 -- Agregar service_product
 CREATE PROCEDURE add_service_product (
@@ -687,7 +623,7 @@ BEGIN
 END //
 
 -- Obtener todos los activos
-CREATE PROCEDURE get_active_service_products ()
+CREATE PROCEDURE get_service_active_products ()
 BEGIN
   SELECT *
   FROM service_products
@@ -748,8 +684,6 @@ BEGIN
   END IF;
 END //
 
-DELIMITER ;
-DELIMITER //
 
 -- Agregar usuario si no existe
 CREATE PROCEDURE add_user (
@@ -867,6 +801,9 @@ BEGIN
   );
 END //
 
+
+
+
 -- Eliminación lógica de usuario (estado = 4)
 CREATE PROCEDURE delete_user_logico (
   IN p_user_id INT,
@@ -902,27 +839,17 @@ BEGIN
   );
 END //
 
--- Login (por correo y contraseña)
-CREATE PROCEDURE get_user_by_credentials (
-  IN p_user_mail VARCHAR(100),
-  IN p_user_password VARCHAR(100)
-)
-BEGIN
-  SELECT *
-  FROM user
-  WHERE user_mail = p_user_mail
-    AND user_password = p_user_password
-    AND state_user_id = 1;
-END //
+-- Login (por correo, numero o nicname y contraseña)
 
--- Buscar por contraseña
-CREATE PROCEDURE get_user_by_password (
-  IN p_user_password VARCHAR(100)
+CREATE PROCEDURE get_user_by_credentials (
+  IN p_user_identifier VARCHAR(100),  -- Cambiamos el nombre del parámetro
+  IN p_user_password VARCHAR(60)
 )
 BEGIN
-  SELECT *
+  SELECT user.user_name , user.user_mail , user.user_tel, user.state_user_id
   FROM user
-  WHERE user_password = p_user_password
+  WHERE (user_mail = p_user_identifier OR user_tel = p_user_identifier OR user_name = p_user_identifier)
+    AND user_password = p_user_password
     AND state_user_id = 1;
 END //
 
@@ -939,9 +866,6 @@ BEGIN
   LIMIT 50;
 END //
 
-DELIMITER ;
-
-DELIMITER //
 
 -- Agregar servicio
 CREATE PROCEDURE add_service (
@@ -967,7 +891,7 @@ CREATE PROCEDURE get_service_by_id (
   IN p_service_id INT
 )
 BEGIN
-  SELECT * FROM service WHERE service_id = p_service_id;
+  SELECT * FROM service WHERE servicie_id = p_service_id;
 END //
 
 -- Actualizar servicio
@@ -987,7 +911,7 @@ BEGIN
     imgs_id = p_imgs_id,
     service_descuento = p_service_descuento,
     state_objets_id = p_state_objets_id
-  WHERE service_id = p_service_id;
+  WHERE servicie_id = p_service_id;
 END //
 
 -- Desactivar servicio (eliminación lógica)
@@ -1006,12 +930,12 @@ BEGIN
   SELECT service_name, service_description, imgs_id, service_descuento, state_objets_id
   INTO v_name, v_desc, v_imgs_id, v_descuento, v_state
   FROM service
-  WHERE service_id = p_service_id;
+  WHERE servicie_id = p_service_id;
 
   -- Marcar como inactivo
   UPDATE service
   SET state_objets_id = 4
-  WHERE service_id = p_service_id;
+  WHERE servicie_id = p_service_id;
 
   -- Insertar en historial
   INSERT INTO historial_service (
@@ -1028,9 +952,7 @@ BEGIN
   );
 END //
 
-DELIMITER //
-
-CREATE PROCEDURE get_active_services ()
+CREATE PROCEDURE get_services_active ()
 BEGIN
   SELECT 
     s.servicie_id,
@@ -1044,8 +966,6 @@ BEGIN
   INNER JOIN imgs i ON s.imgs_id = i.imgs_id
   WHERE s.state_objets_id = 1 AND i.state_objets_id = 1;
 END //
-
-DELIMITER //
 
 
 -- Obtener servicios por estado (incluye 'all')
@@ -1068,7 +988,7 @@ CREATE PROCEDURE get_active_service_by_id (
 BEGIN
   SELECT *
   FROM service
-  WHERE service_id = p_service_id
+  WHERE servicie_id = p_service_id
     AND state_objets_id = 1;
 END //
 
@@ -1084,10 +1004,8 @@ BEGIN
     AND state_objets_id = 1;
 END //
 
-DELIMITER ;
-DELIMITER //
 
-CREATE PROCEDURE add_img (
+CREATE PROCEDURE add_imgs (
   IN p_imgs_name VARCHAR(30),
   IN p_imgs_url VARCHAR(200),
   IN p_imgs_description VARCHAR(300),
@@ -1117,7 +1035,6 @@ INSERT INTO state_user (state_user_id, state_user_name, state_user_description) 
 (3, 'Por confirmar', 'Pendiente de validación'),
 (4, 'Eliminado', 'Cuenta eliminada');
 
-
 -- Type of changes
 INSERT INTO type_change (type_change_id, type_change_name, type_change_description) VALUES
 (1, 'CREATE', 'Creación de registro'),
@@ -1130,7 +1047,7 @@ INSERT INTO state_objets (state_objets_id, state_objets_name, state_objets_descr
 (3, 'por confirmar', 'Elemento en estado pendiente de confirmación o revisión'),
 (4, 'eliminado', 'Elemento marcado como eliminado, pero no borrado físicamente');
 
-call add_user(
+CALL add_user(
   "admin",
   "sebas.jara.mon1@gmail.com",
   "3054102953",
@@ -1139,160 +1056,170 @@ call add_user(
   NULL
 );
 
-call add_img(
-   "Home_icon"
-  ,"/assets/icons/Home.svg"
-  ,"Icono que se pondrá en el nav para denotar el home"
-  ,1
+CALL add_imgs(
+   "Home_icon",
+   "/assets/icons/Home.svg",
+   "Icono que se pondrá en el nav para denotar el home",
+   1
 );
 
-call add_img(
-   "Services_icon"
-  ,"/assets/icons/Services.svg"
-  ,"Icono que se pondrá en el nav para denotar los Services"
-  ,1
+CALL add_imgs(
+   "Services_icon",
+   "/assets/icons/Services.svg",
+   "Icono que se pondrá en el nav para denotar los Services",
+   1
 );
 
-call add_nav (
+CALL add_nav (
   "Home",
   NULL,
-  "Interfaz/penstaña donde todos los usuarios entran de primeras para ofrecer mis servicios"
-  ,1
-  ,"Home"
-  ,1
-  ,1
+  "Interfaz/pestaña donde todos los usuarios entran de primeras para ofrecer mis servicios",
+  1,
+  "Home",
+  1,
+  1
 );
 
-call add_nav (
+CALL add_nav (
   "Services",
   NULL,
-  "Interfaz donde vamos a poner nuestras categorias de servicios"
-  ,1
-  ,"Services"
-  ,2
-  ,1
+  "Interfaz donde vamos a poner nuestras categorías de servicios",
+  1,
+  "Services",
+  2,
+  1
 );
 
-call add_img (
-   "camera_1"
-  ,"/assets/Producst_img/camera1.webp"
-  ,"Camara bonita"
-  ,1
+CALL add_imgs (
+   "camera_1",
+   "/assets/Producst_imgs/camera1.webp",
+   "Camara bonita",
+   1
 );
 
-call add_img (
-   "camera_2"
-  ,"/assets/Producst_img/camera2.avif"
-  ,"Camara bonita"
-  ,1
+CALL add_imgs (
+   "camera_2",
+   "/assets/Producst_imgs/camera2.avif",
+   "Camara bonita",
+   1
 );
 
-call add_img (
-   "camera_3"
-  ,"/assets/Producst_img/camera3.png"
-  ,"Camara bonita"
-  ,1
+CALL add_imgs (
+   "camera_3",
+   "/assets/Producst_imgs/camera3.png",
+   "Camara bonita",
+   1
 );
 
-call add_img (
-   "camera_4"
-  ,"/assets/Producst_img/camera4.png"
-  ,"Camara bonita"
-  ,1
+CALL add_imgs (
+   "camera_4",
+   "/assets/Producst_imgs/camera4.png",
+   "Camara bonita",
+   1
 );
 
-call add_img (
-   "camera + sensor de movimiento"
-  ,"/assets/Producst_img/Sensor_movimiento.jpg"
-  ,"Camara bonita"
-  ,1
+CALL add_imgs (
+   "camera + sensor de movimiento",
+   "/assets/Producst_imgs/Sensor_movimiento.jpg",
+   "Camara bonita",
+   1
 );
 
-call add_product (
-  "camara 360 grados"
-  ,3
-  ,"Camara que gira en 360 deg ideal para cubrir zonas de amplio espacio"
-  ,"30000"
-  ,1
-  ,1
+CALL add_product (
+  "camara 360 grados",
+  3,
+  "Camara que gira en 360 deg ideal para cubrir zonas de amplio espacio",
+  "30000",
+  1,
+  1
 );
 
-call add_product (
-  "camara tipo cabeza 180 deg"
-  ,4
-  ,"Camara ideal para cuartos no muy grandes y que no tienen una tn amplia covertura"
-  ,"22000"
-  ,1
-  ,1
+CALL add_product (
+  "camara tipo cabeza 180 deg",
+  4,
+  "Camara ideal para cuartos no muy grandes y que no tienen una tn amplia cobertura",
+  "22000",
+  1,
+  1
 );
 
-call add_product (
-  "camara tipo cabeza 180 deg"
-  ,5
-  ,"Camara ideal para cuartos no muy grandes y que no tienen una tn amplia covertura"
-  ,"22000"
-  ,1
-  ,1
+CALL add_product (
+  "camara tipo cabeza 180 deg",
+  5,
+  "Camara ideal para cuartos no muy grandes y que no tienen una tn amplia cobertura",
+  "22000",
+  1,
+  1
 );
 
-
-call add_product (
-  "Camara 360 deg :D"
-  ,6
-  ,"Camara de alta calidad ideal para cuartos no muy grandes y que no tienen una tn amplia covertura esta bonita :D"
-  ,"45000"
-  ,1
-  ,1
+CALL add_product (
+  "Camara 360 deg :D",
+  6,
+  "Camara de alta calidad ideal para cuartos no muy grandes y que no tienen una tn amplia cobertura esta bonita :D",
+  "45000",
+  1,
+  1
 );
 
-call add_product (
-  "Camara 180 + sensor de proximidad :3"
-  ,7
-  ,"Camara de alta calidad ideal para cuartos no muy grandes y que no tienen una tn amplia covertura esta bonita :D"
-  ,"50000"
-  ,1
-  ,1
+CALL add_product (
+  "Camara 180 + sensor de proximidad :3",
+  7,
+  "Camara de alta calidad ideal para cuartos no muy grandes y que no tienen una tn amplia cobertura esta bonita :D",
+  "50000",
+  1,
+  1
 );
 
-call add_service (
+CALL add_service (
   "Sistemas de monitoreo",
-  "Se ofrece el servicio de instalacion en su vivienda, empreza, recinto, tienda, etc... la instalacion de camaras y sensores",
+  "Se ofrece el servicio de instalación en su vivienda, empresa, recinto, tienda, etc... la instalación de cámaras y sensores",
   7,
   10,
   1
 );
 
-call add_service_product (
+CALL add_service_product (
   NULL,
   1,
   1,
   1
 );
 
-call add_service_product (
+CALL add_service_product (
   NULL,
   1,
   2,
   1
 );
 
-call add_service_product (
+CALL add_service_product (
   NULL,
   1,
   3,
   1
 );
 
-call add_service_product (
+CALL add_service_product (
   NULL,
   1,
   4,
   1
 );
 
-call add_service_product (
+CALL add_service_product (
   NULL,
   1,
   5,
   1
 );
+
+DROP USER IF EXISTS 'guest_your_place_safed'@'localhost'; 
+CREATE USER 'guest_your_place_safed'@'localhost' IDENTIFIED BY 'im a guest';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_user_by_credentials TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_nav_active_with_imgs TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_services_active TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_services_by_discount_range TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_service_active_products TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_products_by_price_range TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_state_services TO 'guest_your_place_safed'@'localhost';
+FLUSH PRIVILEGES;
