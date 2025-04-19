@@ -1,0 +1,165 @@
+Table state_user {
+  state_user_id int [pk]
+  state_user_name varchar(20)
+  state_user_description varchar(300)
+}
+
+Table gender {
+  gender_id int [pk]
+  gender_name varchar(20)
+  gender_description varchar(300)
+}
+
+Table user {
+  user_id int [pk]
+  user_name varchar(30)
+  user_mail varchar(100)
+  user_tel varchar(10)
+  state_user_id int [ref: > state_user.state_user_id]
+  gender_id int [ref: > gender.gender_id]
+}
+
+Table type_change {
+  type_change_id int [pk]
+  type_change_name varchar(6)
+  type_change_description varchar(300)
+}
+
+Table user_historial {
+  user_historial_id int [pk]
+  changed_user_id int [ref: > user.user_id]
+  maker_user_id int [ref: > user.user_id]
+  type_change_id int [ref: > type_change.type_change_id]
+  user_historial_date datetime
+  user_historial_description varchar(300)
+  old_user_name varchar(30)
+  old_user_mail varchar(100)
+  old_user_tel varchar(10)
+  old_state_user_id int [ref: > state_user.state_user_id]
+  old_gender_id int [ref: > gender.gender_id]
+  new_user_name varchar(30)
+  new_user_mail varchar(100)
+  new_user_tel varchar(10)
+  new_state_user_id int [ref: > state_user.state_user_id]
+  new_gender_id int [ref: > gender.gender_id]
+}
+
+Table state_objets {
+  state_objets_id int [pk]
+  state_objets_name varchar(20)
+  state_objets_description varchar(300)
+}
+
+Table service {
+  servicie_id int [pk]
+  service_name varchar(40)
+  service_description varchar(300)
+  imgs_id int [ref: > imgs.imgs_id]
+  service_descuento int
+  state_objets_id int [ref: > state_objets.state_objets_id]
+}
+
+Table nav {
+  nav_id int [pk]
+  nav_name varchar(50)
+  service_id int [ref: > service.servicie_id]
+  nav_description varchar(300)
+  state_objets_id int [ref: > state_objets.state_objets_id]
+}
+
+Table imgs {
+  imgs_id int [pk]
+  imgs_name varchar(30)
+  imgs_url varchar(200)
+  imgs_description varchar(300)
+  state_objets_id int [ref: > state_objets.state_objets_id]
+}
+
+Table historial_nav {
+  historial_nav_id int [pk]
+  maker_user_id int [ref: > user.user_id]
+  changed_nav_id int [ref: > nav.nav_id]
+  type_change_id int [ref: > type_change.type_change_id]
+  historial_nav_date datetime
+  historial_nav_description varchar(300)
+  new_nav_name varchar(50)
+  new_service_id int [ref: > service.servicie_id]
+  new_nav_description varchar(300)
+  new_state_objets_id int [ref: > state_objets.state_objets_id]
+  old_nav_name varchar(50)
+  old_new_service_id int [ref: > service.servicie_id]
+  old_nav_description varchar(300)
+  old_state_objets_id int [ref: > state_objets.state_objets_id]
+}
+
+Table historial_service {
+  historial_service_id int [pk]
+  maker_user_id int [ref: > user.user_id]
+  changed_service_id int [ref: > service.servicie_id]
+  type_change_id int [ref: > type_change.type_change_id]
+  historial_service_date datetime
+  historial_service_description varchar(300)
+  new_service_name varchar(40)
+  new_service_description varchar(300)
+  new_imgs_id int [ref: > imgs.imgs_id]
+  new_service_descuento int
+  new_state_objets_id int
+  old_service_name varchar(40)
+  old_service_description varchar(300)
+  old_imgs_id int [ref: > imgs.imgs_id]
+  old_service_descuento int
+  old_state_objets_id int
+}
+
+Table service_products {
+  service_products_id int [pk]
+  imgs_id int [ref: > imgs.imgs_id]
+  service_id int [ref: > service.servicie_id]
+  products_id int [ref: > products.products_id]
+  state_objets_id int [ref: > state_objets.state_objets_id]
+}
+
+Table historial_service_products {
+  historial_service_id int [pk]
+  maker_user_id int [ref: > user.user_id]
+  changed_service_products_id int [ref: > service_products.service_products_id]
+  type_change_id int [ref: > type_change.type_change_id]
+  historial_service_date datetime
+  historial_service_description varchar(300)
+  new_imgs_id int [ref: > imgs.imgs_id]
+  new_service_id int [ref: > service.servicie_id]
+  new_products_id int [ref: > products.products_id]
+  new_state_objets_id int [ref: > state_objets.state_objets_id]
+  old_imgs_id int [ref: > imgs.imgs_id]
+  old_service_id int [ref: > service.servicie_id]
+  old_products_id int [ref: > products.products_id]
+  old_state_objets_id int [ref: > state_objets.state_objets_id]
+}
+
+Table products {
+  products_id int [pk]
+  producst_name varchar(30)
+  imgs_id int [ref: > imgs.imgs_id]
+  products_description varchar(300)
+  products_precio varchar(9)
+  state_objets_id int [ref: > state_objets.state_objets_id]
+}
+
+Table historial_products {
+  historial_products_id int [pk]
+  maker_user_id int [ref: > user.user_id]
+  changed_historial_products_id int [ref: > products.products_id]
+  type_change_id int [ref: > type_change.type_change_id]
+  historial_products_date datetime
+  historial_products_description varchar(300)
+  new_producst_name varchar(30)
+  new_imgs_id int [ref: > imgs.imgs_id]
+  new_products_description varchar(300)
+  new_products_precio varchar(9)
+  new_state_objets_id int [ref: > state_objets.state_objets_id]
+  old_producst_name varchar(30)
+  old_imgs_id int [ref: > imgs.imgs_id]
+  old_products_description varchar(300)
+  old_products_precio varchar(9)
+  old_state_objets_id int [ref: > state_objets.state_objets_id]
+}
