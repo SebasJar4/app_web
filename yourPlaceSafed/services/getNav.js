@@ -1,7 +1,13 @@
-export const getNavs = async () => {
+let host = require("./rute.json").host;
+
+// export 
+const getNavs = async () => {
   try {
     console.log("→ Realizando fetch...");
-    const response = await fetch("http://192.168.20.24/project_web/backend/api/getNav.php");
+    const url = "http://"+host+"getNav.php";
+    console.log(url);
+    
+    const response = await fetch(url);
 
     console.log("→ Response status:", response.status);
     if (!response.ok) throw new Error("Error al obtener los navs");
@@ -15,3 +21,5 @@ export const getNavs = async () => {
     return [];
   }
 };
+
+getNavs();

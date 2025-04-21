@@ -1,2 +1,5 @@
+#enviromental
 .env
 key_ssh/
+init.sh
+close.sh

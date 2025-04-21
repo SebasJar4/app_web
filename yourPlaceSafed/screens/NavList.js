@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { getNavs } from "../services/getNav";
 import icon from "../assets/your_place_safed.png"; // ícono principal
+import { colors } from "../assets/css/colors";clear
 
 export default function NavList() {
   const navigation = useNavigation();
@@ -35,9 +36,8 @@ export default function NavList() {
   };
 
   const getFullImageUrl = (imgPath) => {
-    console.log(`http://localhost:8081${imgPath}`);
-    // Asegúrate de cambiar la IP si usas otro servidor
-    return `http://localhost:8081${imgPath}`;
+    if (!imgPath) return null;
+    return `http://localhost:8081${imgPath}.svg`;
   };
 
   return (
@@ -46,7 +46,6 @@ export default function NavList() {
         <Text style={styles.collapseButton}>{collapsed ? "⏩" : "⏪"}</Text>
       </TouchableOpacity>
 
-      {/* Icono principal con navegación a Home */}
       <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <View style={styles.iconContainer}>
           <Image
@@ -59,16 +58,13 @@ export default function NavList() {
 
       {!collapsed && <Text style={styles.header}>Menú</Text>}
 
-      {/* Lista scrollable de navegación */}
       <ScrollView contentContainerStyle={styles.menuContainer}>
         {navs.map((item) => (
           <TouchableOpacity
             key={item.nav_id}
             style={styles.menuItem}
             onPress={() => {
-              if (typeof item.url === "string") {
-                navigation.navigate(item.url);
-              } else if (typeof item.url === "object" && item.url.name) {
+              if (item.url) {
                 navigation.navigate(item.url);
               } else {
                 console.warn("Ruta inválida:", item.url);
@@ -76,15 +72,13 @@ export default function NavList() {
             }}
           >
             <View style={styles.navRow}>
-              {/* Icono del item */}
-              {item.img_url && (
+              {item.imgs_url && (
                 <Image
-                  source={{ uri: getFullImageUrl(item.img_url) }}
+                  source={{ uri: getFullImageUrl(item.imgs_url) }}
                   style={collapsed ? styles.menuIconCollapsed : styles.menuIcon}
                   resizeMode="contain"
                 />
               )}
-              {/* Nombre si no está colapsado */}
               {!collapsed && (
                 <Text style={styles.itemText}>{item.nav_name}</Text>
               )}

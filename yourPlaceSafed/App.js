@@ -4,12 +4,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, StyleSheet } from "react-native";
 import NavList from "./screens/NavList";
 import { getNavs } from "./services/getNav";
-
 // Pantallas base
 import Home from "./screens/Home";
 import Services from "./screens/Services";
 import Login from "./screens/Login";
 import Default from "./screens/Default";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -55,10 +55,10 @@ export default function App() {
 
 const styles = StyleSheet.create({
   appContainer: {
-    flex: 1,
-    flexDirection: "row",
+    flex: 1
+   ,flexDirection: "row"
   },
   pageContent: {
-    flex: 1,
+    flex: 1
   },
 });

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-
+// Paleta de colores:
+import { colors } from "../assets/css/colors";
 export default function Home() {
   return (
     <View style={styles.container}>
@@ -10,6 +11,11 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  title: { fontSize: 24 },
+  container: { 
+    flex: 1
+   ,padding: 20 
+   ,backgroundColor: colors[500]
+  }
+  ,title: { fontSize: 24 }
+  ,
 });

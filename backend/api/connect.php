@@ -5,14 +5,16 @@ final class DB
 
     public function __construct() {
         $host = "localhost";
-        $user = "root";
-        $pass = "";
-        $db   = "your_place_safed"; // <- Asegúrate de cambiar esto por el nombre real
-
-        $this->conn = new mysqli($host, $user, $pass, $db);
-
-        if ($this->conn->connect_error) {
-            die("Error de conexión: " . $this->conn->connect_error);
+        $user = "guest_your_place_safed";
+        $pass = "im a guest";
+        $db   = "your_place_safed";
+        try {
+            //code...
+            $this->conn = new mysqli($host, $user, $pass, $db);
+        } catch (\Throwable $th) {
+            //throw $th;
+            echo "error";
+            echo die("Error de conexión: " . $th);
         }
     }
 
@@ -24,4 +26,6 @@ final class DB
       $this->conn->close();
     }
 }
+
+
 ?>

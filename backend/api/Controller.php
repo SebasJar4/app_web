@@ -81,4 +81,8 @@ abstract class Controller
 
         $stmt->bind_param($types, ...$bindValues);
     }
+
+    public function close() : void {
+      $this->db->close(); // Cierra la conección
+    }
 }

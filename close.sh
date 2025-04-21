@@ -4,7 +4,7 @@ echo "🛑 Deteniendo servicios..."
 
 # ---------- Expo ----------
 if pgrep -f "pnpm run web" > /dev/null; then
-    pid=$(pgrep -f "pnpm run web")
+    pid=$(pgrep -f "pnpm run")
     kill $pid
     echo "✅ Expo detenido (PID: $pid)"
 else
@@ -23,7 +23,7 @@ fi
 # ---------- MySQL ----------
 if pgrep -x "mysqld" > /dev/null; then
     echo "🚫 Deteniendo MySQL..."
-    sudo systemctl stop mysql
+    systemctl stop mysqld
     echo "✅ MySQL detenido"
 else
     echo "ℹ️ MySQL no estaba corriendo"

@@ -1,35 +1,17 @@
 <?php
-require_once "connect.php";
+require_once "Controller.php";
 
-class ControllerNav
+class ControllerNav extends Controller
 {
-    private $conn;
-
-    public function __construct() {
-        $db = new DB();
-        $this->conn = $db->getConnection();
-    }
-
-    public function getNav() {
-        $stmt = $this->conn->prepare("CALL get_nav_by_state(?)");
-        $state = 1;
-        $stmt->bind_param("i", $state);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        $datos = [];
-
-        while ($row = $result->fetch_assoc()) {
-            $datos[] = $row;
-        }
-
+    public function getNav() : array {
+        $query = "CALL get_nav_active_with_imgs();"; // era $this->conn, pero en tu Controller se llama $this->con
+        $datos = $this->getAllRows( $query );
         return $datos;
     }
 
-    public function mostrarJSON() {
+    public function mostrarJSON() : void {
         header('Content-Type: application/json');
         echo json_encode($this->getNav());
     }
 }
-
 ?>

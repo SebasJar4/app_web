@@ -1,0 +1,52 @@
+[Sun Apr 20 20:48:43 2025] PHP 8.4.6 Development Server (http://localhost:8000) started
+[Sun Apr 20 20:49:24 2025] [::1]:48668 Accepted
+[Sun Apr 20 20:49:24 2025] [::1]:48668 [200]: GET /getNav.php
+[Sun Apr 20 20:49:24 2025] [::1]:48668 Closing
+[Sun Apr 20 20:49:40 2025] [::1]:44566 Accepted
+[Sun Apr 20 20:49:40 2025] [::1]:44566 [200]: GET /getNav.php
+[Sun Apr 20 20:49:40 2025] [::1]:44566 Closing
+[Sun Apr 20 20:49:55 2025] [::1]:37698 Accepted
+[Sun Apr 20 20:49:55 2025] [::1]:37698 [200]: GET /getNav.php
+[Sun Apr 20 20:49:55 2025] [::1]:37698 Closing
+[Sun Apr 20 20:50:57 2025] [::1]:35722 Accepted
+[Sun Apr 20 20:50:57 2025] [::1]:35722 [200]: GET /getNav.php
+[Sun Apr 20 20:50:57 2025] [::1]:35722 Closing
+[Sun Apr 20 20:54:20 2025] [::1]:50272 Accepted
+[Sun Apr 20 20:54:20 2025] [::1]:50272 [200]: GET /getNav.php
+[Sun Apr 20 20:54:20 2025] [::1]:50272 Closing
+[Sun Apr 20 20:54:34 2025] [::1]:40192 Accepted
+[Sun Apr 20 20:54:34 2025] [::1]:40192 [200]: GET /getNav.php
+[Sun Apr 20 20:54:34 2025] [::1]:40192 Closing
+[Sun Apr 20 20:54:34 2025] [::1]:40206 Accepted
+[Sun Apr 20 20:54:34 2025] [::1]:40206 [404]: GET /favicon.ico - No such file or directory
+[Sun Apr 20 20:54:34 2025] [::1]:40206 Closing
+[Sun Apr 20 20:54:47 2025] [::1]:42772 Accepted
+[Sun Apr 20 20:54:47 2025] [::1]:42772 [200]: GET /getNav.php
+[Sun Apr 20 20:54:47 2025] [::1]:42772 Closing
+[Sun Apr 20 20:54:47 2025] [::1]:42774 Accepted
+[Sun Apr 20 20:54:47 2025] [::1]:42774 [404]: GET /favicon.ico - No such file or directory
+[Sun Apr 20 20:54:47 2025] [::1]:42774 Closing
+[Sun Apr 20 20:56:34 2025] [::1]:51268 Accepted
+[Sun Apr 20 20:56:34 2025] [::1]:51268 [200]: GET /getNav.php
+[Sun Apr 20 20:56:34 2025] [::1]:51268 Closing
+[Sun Apr 20 20:56:41 2025] [::1]:56614 Accepted
+[Sun Apr 20 20:56:41 2025] [::1]:56614 [200]: GET /getNav.php
+[Sun Apr 20 20:56:41 2025] [::1]:56614 Closing
+[Sun Apr 20 20:56:41 2025] [::1]:56630 Accepted
+[Sun Apr 20 20:56:41 2025] [::1]:56630 [404]: GET /favicon.ico - No such file or directory
+[Sun Apr 20 20:56:41 2025] [::1]:56630 Closing
+[Sun Apr 20 20:57:25 2025] [::1]:51004 Accepted
+[Sun Apr 20 20:57:25 2025] [::1]:51004 [200]: GET /getNav.php
+[Sun Apr 20 20:57:25 2025] [::1]:51004 Closing
+[Sun Apr 20 20:57:35 2025] [::1]:54478 Accepted
+[Sun Apr 20 20:57:35 2025] [::1]:54478 [200]: GET /getNav.php
+[Sun Apr 20 20:57:35 2025] [::1]:54478 Closing
+[Sun Apr 20 21:00:15 2025] [::1]:55880 Accepted
+[Sun Apr 20 21:00:15 2025] [::1]:55880 [200]: GET /getNav.php
+[Sun Apr 20 21:00:15 2025] [::1]:55880 Closing
+[Sun Apr 20 21:01:40 2025] [::1]:44120 Accepted
+[Sun Apr 20 21:01:40 2025] [::1]:44120 [200]: GET /getNav.php
+[Sun Apr 20 21:01:40 2025] [::1]:44120 Closing
+[Sun Apr 20 21:03:15 2025] [::1]:49878 Accepted
+[Sun Apr 20 21:03:15 2025] [::1]:49878 [200]: GET /getNav.php
+[Sun Apr 20 21:03:15 2025] [::1]:49878 Closing

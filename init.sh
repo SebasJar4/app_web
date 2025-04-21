@@ -1,49 +1,80 @@
 #!/bin/bash
+cd /run/media/sebas/Docs/Universidad/programacion/project_web/
 
-cd ./yourPlaceSafed/
+# --- Leer argumentos tipo clave=valor ---
+expo_platform=""
+for arg in "$@"; do
+  case $arg in
+    expo=*)
+      value="${arg#*=}"
+      case "$value" in
+        start|-s) expo_platform="start" ;;
+        android|-a) expo_platform="android" ;;
+        ios|-i) expo_platform="ios" ;;
+        web|-w) expo_platform="web" ;;
+        *)
+          echo "❌ Plataforma inválida para expo: $value"
+          echo "Opciones válidas: start (-s), android (-a), ios (-i), web (-w)"
+          exit 1
+          ;;
+      esac
+      ;;
+    *)
+      echo "❌ Argumento desconocido: $arg"
+      exit 1
+      ;;
+  esac
+done
 
-# Asegurar carpeta logs
+if [ -z "$expo_platform" ]; then
+  echo "⚠️ No se paso ningun argumento por endo se obviara por defecto y expo se iniciará en la opcion web"
+  expo_platform=web
+fi
+
+fecha_formateada=$(date +"%d-%m-%Y")
+ext=".log"
+
+cd ./yourPlaceSafed/ || { echo "❌ Carpeta yourPlaceSafed no encontrada"; exit 1; }
+
 mkdir -p ./logs
 
 # ---------- Expo ----------
-baseNameExpo="expo_web"
-ext=".log"
-nameLogExpo="$baseNameExpo$ext"
+baseNameExpo="expo_${expo_platform}_server_"
 counter=0
-
-while [ -e "./logs/$nameLogExpo" ]; do
+while [ -e "./logs/${baseNameExpo}${counter}_(${fecha_formateada})${ext}" ]; do
     ((counter++))
-    nameLogExpo="${baseNameExpo}${counter}${ext}"
 done
+nameLogExpo="${baseNameExpo}${counter}_(${fecha_formateada})${ext}"
+logPathExpo="./logs/$nameLogExpo"
 
-if pgrep -f "pnpm run web" > /dev/null; then
-    pid=$(pgrep -f "pnpm run web")
+if pgrep -f "pnpm run" > /dev/null; then
+    pid=$(pgrep -f "pnpm run ")
     echo "⚠️ Expo ya se está ejecutando (PID: $pid)"
 else
-    nohup pnpm run web > "./logs/$nameLogExpo" 2>&1 &
+    nohup pnpm run $expo_platform > "$logPathExpo" >&1 &
     pid=$!
-    echo "🚀 Expo iniciado (PID: $pid) | Log: ./logs/$nameLogExpo"
+    echo "🚀 Expo ($expo_platform) iniciado (PID: $pid) | Log: $logPathExpo"
 fi
 
 cd ../
 
 # ---------- PHP ----------
-baseNamePhp="php_server"
-nameLogPhp="$baseNamePhp$ext"
+mkdir -p ./backend/logs
+baseNamePhp="php_server_"
 counterPhp=0
-
-while [ -e "./yourPlaceSafed/logs/$nameLogPhp" ]; do
+while [ -e "./backend/logs/${baseNamePhp}${counterPhp}_(${fecha_formateada})${ext}" ]; do
     ((counterPhp++))
-    nameLogPhp="${baseNamePhp}${counterPhp}${ext}"
 done
+nameLogPhp="${baseNamePhp}${counterPhp}_(${fecha_formateada})${ext}"
+logPathPhp="./backend/logs/$nameLogPhp"
 
 if lsof -i :8000 | grep LISTEN > /dev/null; then
     pid=$(lsof -ti :8000)
     echo "⚠️ PHP ya está ejecutándose en el puerto 8000 (PID: $pid)"
 else
-    nohup php -S localhost:8000 -t ./yourPlaceSafed/backend/api > "./yourPlaceSafed/logs/$nameLogPhp" 2>&1 &
+    nohup php -S localhost:8000 -t ./backend/api/ > "$logPathPhp" >&1 &
     pid=$!
-    echo "🚀 PHP iniciado (PID: $pid) | Log: ./yourPlaceSafed/logs/$nameLogPhp"
+    echo "🚀 PHP iniciado (PID: $pid) | Log: $logPathPhp"
 fi
 
 # ---------- MySQL ----------
@@ -52,7 +83,7 @@ if pgrep -x "mysqld" > /dev/null; then
     echo "⚠️ MySQL ya se está ejecutando (PID: $pid)"
 else
     echo "🚀 Iniciando MySQL..."
-    sudo systemctl start mysql
+    systemctl start mysqld
     sleep 2
     if pgrep -x "mysqld" > /dev/null; then
         pid=$(pgrep -x "mysqld")
@@ -61,3 +92,5 @@ else
         echo "❌ Error: No se pudo iniciar MySQL"
     fi
 fi
+
+code yourPlaceSafed/$logPathExpo $logPathPhp

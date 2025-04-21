@@ -1,0 +1,7 @@
+[Sun Apr 20 21:24:18 2025] PHP 8.4.6 Development Server (http://localhost:8000) started
+[Sun Apr 20 21:28:11 2025] [::1]:41830 Accepted
+[Sun Apr 20 21:28:20 2025] [::1]:41830 [200]: GET /getNav.php
+[Sun Apr 20 21:28:20 2025] [::1]:41830 Closing
+[Sun Apr 20 21:28:27 2025] [::1]:36230 Accepted
+[Sun Apr 20 21:28:27 2025] [::1]:36230 [200]: GET /getNav.php
+[Sun Apr 20 21:28:27 2025] [::1]:36230 Closing
