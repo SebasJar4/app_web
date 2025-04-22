@@ -1058,14 +1058,14 @@ CALL add_user(
 
 CALL add_imgs(
    "Home_icon",
-   "/assets/icons/Home.svg",
+   "/icons/Home.svg",
    "Icono que se pondrá en el nav para denotar el home",
    1
 );
 
 CALL add_imgs(
    "Services_icon",
-   "/assets/icons/Services.svg",
+   "/icons/Services.svg",
    "Icono que se pondrá en el nav para denotar los Services",
    1
 );
@@ -1092,38 +1092,46 @@ CALL add_nav (
 
 CALL add_imgs (
    "camera_1",
-   "/assets/Producst_imgs/camera1.webp",
+   "/Producst_imgs/camera1.webp",
    "Camara bonita",
    1
 );
 
 CALL add_imgs (
    "camera_2",
-   "/assets/Producst_imgs/camera2.avif",
+   "/Producst_imgs/camera2.avif",
    "Camara bonita",
    1
 );
 
 CALL add_imgs (
    "camera_3",
-   "/assets/Producst_imgs/camera3.png",
+   "/Producst_imgs/camera3.png",
    "Camara bonita",
    1
 );
 
 CALL add_imgs (
    "camera_4",
-   "/assets/Producst_imgs/camera4.png",
+   "/Producst_imgs/camera4.png",
    "Camara bonita",
    1
 );
 
 CALL add_imgs (
    "camera + sensor de movimiento",
-   "/assets/Producst_imgs/Sensor_movimiento.jpg",
+   "/Producst_imgs/Sensor_movimiento.jpg",
    "Camara bonita",
    1
 );
+
+call add_imgs (
+   "Alarmas",
+   "/Producst_imgs/alarm.png",
+   "Alarma :D",
+   1
+);
+
 
 CALL add_product (
   "camara 360 grados",
@@ -1133,6 +1141,8 @@ CALL add_product (
   1,
   1
 );
+
+
 
 CALL add_product (
   "camara tipo cabeza 180 deg",
@@ -1170,10 +1180,36 @@ CALL add_product (
   1
 );
 
+call add_product (
+  "Alarma para tu hogar camara 360 grados",
+  8,
+  "Alarma que asegura tu hogar",
+  "80000",
+  1,
+  1
+);
+
+
 CALL add_service (
   "Sistemas de monitoreo",
   "Se ofrece el servicio de instalación en su vivienda, empresa, recinto, tienda, etc... la instalación de cámaras y sensores",
   7,
+  10,
+  1
+);
+
+CALL add_service (
+  "Sistemas de alarmas",
+  "Se ofrece el servicio de instalación de sistemas de alarmas en su vivienda, empresa, recinto, tienda, etc...",
+  8,
+  10,
+  1
+);
+
+CALL add_service (
+  "Sistemas de alarmas 2",
+  "Se ofrece el servicio de instalación de sistemas de alarmas en su vivienda, empresa, recinto, tienda, etc...",
+  1,
   10,
   1
 );
@@ -1212,6 +1248,8 @@ CALL add_service_product (
   5,
   1
 );
+
+
 
 DROP USER IF EXISTS 'guest_your_place_safed'@'localhost'; 
 CREATE USER 'guest_your_place_safed'@'localhost' IDENTIFIED BY 'im a guest';

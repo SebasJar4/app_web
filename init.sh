@@ -27,15 +27,14 @@ for arg in "$@"; do
 done
 
 if [ -z "$expo_platform" ]; then
-  echo "⚠️ No se paso ningun argumento por endo se obviara por defecto y expo se iniciará en la opcion web"
-  expo_platform=web
+  echo "⚠️ No se pasó ningún argumento, por lo tanto se usará 'web' por defecto"
+  expo_platform="web"
 fi
 
 fecha_formateada=$(date +"%d-%m-%Y")
 ext=".log"
 
 cd ./yourPlaceSafed/ || { echo "❌ Carpeta yourPlaceSafed no encontrada"; exit 1; }
-
 mkdir -p ./logs
 
 # ---------- Expo ----------
@@ -47,14 +46,24 @@ done
 nameLogExpo="${baseNameExpo}${counter}_(${fecha_formateada})${ext}"
 logPathExpo="./logs/$nameLogExpo"
 
-if pgrep -f "pnpm run" > /dev/null; then
-    pid=$(pgrep -f "pnpm run ")
+if pgrep -f "pnpm run $expo_platform" > /dev/null; then
+    pid=$(pgrep -f "pnpm run $expo_platform")
     echo "⚠️ Expo ya se está ejecutando (PID: $pid)"
 else
-    nohup pnpm run $expo_platform > "$logPathExpo" >&1 &
-    pid=$!
-    echo "🚀 Expo ($expo_platform) iniciado (PID: $pid) | Log: $logPathExpo"
+    echo "🏁 Expo ($expo_platform) iniciando ⚙️"
+
+    gnome-terminal -- bash -c "
+        cd /run/media/sebas/Docs/Universidad/programacion/project_web/yourPlaceSafed
+        echo 'iniciando expo 🛂 con terminal interactiva...'
+        script -c 'pnpm run $expo_platform' '$logPathExpo'
+        echo '🛑 El proceso ha finalizado. Presiona cualquier tecla para salir...'
+        read -n 1
+        exec bash
+    "
+
+    echo "🚀 Expo ($expo_platform) iniciado | Log: $logPathExpo"
 fi
+
 
 cd ../
 
@@ -68,13 +77,30 @@ done
 nameLogPhp="${baseNamePhp}${counterPhp}_(${fecha_formateada})${ext}"
 logPathPhp="./backend/logs/$nameLogPhp"
 
-if lsof -i :8000 | grep LISTEN > /dev/null; then
-    pid=$(lsof -ti :8000)
-    echo "⚠️ PHP ya está ejecutándose en el puerto 8000 (PID: $pid)"
+# Obtener la IP del PC
+ip_address=$(hostname -I | awk '{print $1}')
+php_port=8000
+echo "IP de la máquina: $ip_address"
+
+if lsof -i :$php_port | grep LISTEN > /dev/null; then
+    pid=$(lsof -ti :$php_port)
+    echo "⚠️ PHP ya está ejecutándose en el puerto $php_port (PID: $pid)"
 else
-    nohup php -S localhost:8000 -t ./backend/api/ > "$logPathPhp" >&1 &
+    nohup php -S $ip_address:$php_port -t ./backend/api/ > "$logPathPhp" 2>&1 &
     pid=$!
     echo "🚀 PHP iniciado (PID: $pid) | Log: $logPathPhp"
+fi
+
+# ---------- Actualizar rute.json ----------
+rute_json_path="/run/media/sebas/Docs/Universidad/programacion/project_web/yourPlaceSafed/services/rute.json"
+
+# Usar jq para actualizar el archivo rute.json con la IP y puerto
+if [ -f "$rute_json_path" ]; then
+    echo "Actualizando rute.json con la IP $ip_address y el puerto $php_port..."
+    jq ".host = \"$ip_address:$php_port/\"" "$rute_json_path" > temp_rute.json && mv temp_rute.json "$rute_json_path"
+    echo "rute.json actualizado correctamente."
+else
+    echo "❌ No se encontró el archivo rute.json"
 fi
 
 # ---------- MySQL ----------
@@ -83,7 +109,7 @@ if pgrep -x "mysqld" > /dev/null; then
     echo "⚠️ MySQL ya se está ejecutando (PID: $pid)"
 else
     echo "🚀 Iniciando MySQL..."
-    systemctl start mysqld
+    sudo systemctl start mysqld
     sleep 2
     if pgrep -x "mysqld" > /dev/null; then
         pid=$(pgrep -x "mysqld")
@@ -92,5 +118,3 @@ else
         echo "❌ Error: No se pudo iniciar MySQL"
     fi
 fi
-
-code yourPlaceSafed/$logPathExpo $logPathPhp

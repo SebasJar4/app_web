@@ -4,16 +4,16 @@ import { View , StyleSheet , ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Utilidades
-import NavList from "./utils/NavList";
+import NavList from "./NavList";
 // Pantallas base
-import Home from "./screens/Home";
-import Services from "./screens/Services";
-import Login from "./screens/Login";
-import Default from "./screens/Default";
-import { getNavs } from "./services/getNav";
+import Home from "../screens/Home";
+import Services from "../screens/Services";
+import Login from "../screens/Login";
+import Default from "../screens/Default";
+import { getNavs } from "../services/getNav";
 // Stylos base css
-import { basicStyles } from "./assets/base_styles";
-import colors from "./assets/css/colors";
+import { basicStyles } from "../assets/base_styles";
+import { colors } from "../assets/css/colors";
 
 
 
@@ -40,6 +40,7 @@ export default function App() {
      <NavList />
      
      <View style={styles.pageContent}>
+      <ScrollView style={[ basicStyles.view ]}>
        <Stack.Navigator screenOptions={{ headerShown: false }}>
          
            <Stack.Screen name="Home" component={Home} />
@@ -60,14 +61,13 @@ export default function App() {
                );
               })}
        </Stack.Navigator>
+      </ScrollView>
      </View>
     </View>
    </NavigationContainer>
   );
 }
 
-//<ScrollView style={[ basicStyles.view ]}>
-//</ScrollView>
 
 
 const styles = StyleSheet.create({
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 
   pageContent: {
     flex: 100
-   ,backgroundColor: colors[900]
+   ,backgroundColor: colors[950]
    ,paddingVertical: 10
   },
 });

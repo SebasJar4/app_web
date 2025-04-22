@@ -1,11 +1,13 @@
+import rutes from "./rute.json"
 // Ruta local de tu servidor (XAMPP)
-const BASE_URL = 'http://localhost/project_web/backend/api/getServices.php';
+const BASE_URL = 'http://' + rutes.host + 'getServices.php';
 
 export const getServices = async () => {
   try {
     const response = await fetch(BASE_URL);
     const data = await response.json();
-
+    console.log(data);
+    
     // Comprobamos si recibimos un array o un mensaje de error
     if (Array.isArray(data)) {
       return data;

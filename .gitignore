@@ -1,5 +1,13 @@
 #enviromental
 .env
 key_ssh/
-init.sh
-close.sh
+
+#back
+backend/logs
+
+#node
+node_modules
+
+#yourPlaceSafed
+yourPlaceSafed/node_modules
+yourPlaceSafed/package-lock.json

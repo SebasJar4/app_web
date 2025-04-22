@@ -1,25 +1,15 @@
-let host = require("./rute.json").host;
-
-// export 
-const getNavs = async () => {
+import rutes from "./rute.json"
+// services/getNav.js
+export const getNavs = async () => {
   try {
-    console.log("→ Realizando fetch...");
-    const url = "http://"+host+"getNav.php";
-    console.log(url);
-    
-    const response = await fetch(url);
-
-    console.log("→ Response status:", response.status);
-    if (!response.ok) throw new Error("Error al obtener los navs");
-
-    const data = await response.json();
-    console.log("→ Datos recibidos:", data);
-
-    return data;
+    const response = await fetch('http://'+ rutes.host +'/getNav.php');
+    const json = await response.json();
+    return json;
   } catch (error) {
-    console.error("Error en fetch:", error);
+    console.error("Error al obtener navs:", error);
     return [];
   }
 };
 
-getNavs();
+
+export { rutes }

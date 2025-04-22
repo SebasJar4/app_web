@@ -22,7 +22,7 @@ class ControladorServices extends Controller
     // Obtener servicios activos
     public function getActiveServices()
     {
-        $query = "CALL get_active_services()";
+        $query = "CALL get_services_active()";
         return $this->getAllRows($query);
     }
 
