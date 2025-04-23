@@ -56,13 +56,13 @@ const Services = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "#00a",
+    backgroundColor: colors[800],
     flex: 1
   },
   card: {
     flexDirection: 'row',
     marginBottom: 15,
-    backgroundColor: colors[200],
+    backgroundColor: colors[300],
     borderRadius: 10,
     overflow: 'hidden',
     elevation: 2,
