@@ -529,15 +529,28 @@ END //
 -- ----------------------------------------------------
 
 CREATE PROCEDURE get_product_by_state (
-  IN p_state_objets_id VARCHAR(10) -- permite 'all'
+  IN p_state_objets_id VARCHAR(10), -- permite 'all'
+  IN id_init INT,
+  IN pagination_number INT
 )
 BEGIN
   IF p_state_objets_id = 'all' THEN
-    SELECT * FROM products;
+    SELECT * FROM products
+    LIMIT id_init, pagination_number; -- Implementa paginación
   ELSE
     SELECT * FROM products
-    WHERE state_objets_id = CAST(p_state_objets_id AS UNSIGNED);
+    WHERE state_objets_id = CAST(p_state_objets_id AS UNSIGNED)
+    LIMIT id_init, pagination_number; -- Implementa paginación
   END IF;
+END //
+
+
+CREATE PROCEDURE get_products_active (
+  IN id_init INT,
+  IN pagination_number INT
+)
+BEGIN
+  CALL get_product_by_state ( "1" , id_init , pagination_number );
 END //
 
 CREATE PROCEDURE get_products_by_price_range (
@@ -549,7 +562,6 @@ BEGIN
   WHERE state_objets_id = 1 AND CAST(products_precio AS DECIMAL(9,2)) BETWEEN p_min_price AND p_max_price
   ORDER BY CAST(products_precio AS DECIMAL(9,2));
 END //
-
 
 -- Agregar service_product
 CREATE PROCEDURE add_service_product (
@@ -623,7 +635,7 @@ BEGIN
 END //
 
 -- Obtener todos los activos
-CREATE PROCEDURE get_service_active_products ()
+CREATE PROCEDURE get_service_products_active ()
 BEGIN
   SELECT *
   FROM service_products
@@ -640,49 +652,35 @@ BEGIN
   WHERE service_products_id = p_service_product_id;
 END //
 
--- Buscar por product_id + estado
-CREATE PROCEDURE get_service_products_product_id_state (
-  IN p_product_id INT,
-  IN p_state_filter VARCHAR(10)
+
+CREATE PROCEDURE get_service_products_service_id_state (
+    IN p_service_id INT,
+    IN p_state_filter VARCHAR(10),
+    IN p_page_number INT,
+    IN p_page_size INT
 )
 BEGIN
-  IF p_state_filter = 'all' THEN
-    BEGIN
-      SELECT *
-      FROM service_products
-      WHERE products_id = p_product_id;
-    END;
-  ELSE
-    BEGIN
-      SELECT *
-      FROM service_products
-      WHERE products_id = p_product_id
-        AND state_objets_id = CAST(p_state_filter AS UNSIGNED);
-    END;
-  END IF;
+    DECLARE v_offset INT;
+    
+    -- Calcula el desplazamiento inicial de forma ajustada a los parámetros existentes
+    SET v_offset = (p_page_number - 1) * p_page_size;
+
+    IF p_state_filter = 'all' THEN
+        SELECT sp.service_id, p.*
+        FROM service_products sp
+        JOIN products p ON sp.products_id = p.products_id
+        WHERE sp.service_id = p_service_id
+        LIMIT p_page_size OFFSET v_offset;
+    ELSE
+        SELECT sp.service_id, p.*
+        FROM service_products sp
+        JOIN products p ON sp.products_id = p.products_id
+        WHERE sp.service_id = p_service_id
+          AND sp.state_objets_id = CAST(p_state_filter AS UNSIGNED)
+        LIMIT p_page_size OFFSET v_offset;
+    END IF;
 END //
 
--- Buscar por service_id + estado
-CREATE PROCEDURE get_service_products_service_id_state (
-  IN p_service_id INT,
-  IN p_state_filter VARCHAR(10)
-)
-BEGIN
-  IF p_state_filter = 'all' THEN
-    BEGIN
-      SELECT *
-      FROM service_products
-      WHERE service_id = p_service_id;
-    END;
-  ELSE
-    BEGIN
-      SELECT *
-      FROM service_products
-      WHERE service_id = p_service_id
-        AND state_objets_id = CAST(p_state_filter AS UNSIGNED);
-    END;
-  END IF;
-END //
 
 
 -- Agregar usuario si no existe
@@ -697,7 +695,10 @@ CREATE PROCEDURE add_user (
 BEGIN
   DECLARE v_user_id INT;
 
-  IF NOT EXISTS (SELECT 1 FROM user WHERE user_mail = p_user_mail) THEN
+  -- Verificar si el usuario ya existe
+  SELECT user_id INTO v_user_id FROM user WHERE user_mail = p_user_mail;
+
+  IF v_user_id IS NULL THEN
     INSERT INTO user (
       user_name, user_mail, user_tel, state_user_id, gender_id
     )
@@ -721,6 +722,7 @@ BEGIN
     );
   END IF;
 END //
+
 
 -- Actualizar estado de usuario
 CREATE PROCEDURE update_user_state (
@@ -816,15 +818,18 @@ BEGIN
   DECLARE v_old_state INT;
   DECLARE v_old_gender INT;
 
+  -- Obtener los datos actuales del usuario
   SELECT user_name, user_mail, user_tel, state_user_id, gender_id
   INTO v_old_name, v_old_mail, v_old_tel, v_old_state, v_old_gender
   FROM user
   WHERE user_id = p_user_id;
 
+  -- Actualizar el estado del usuario a "eliminado"
   UPDATE user
   SET state_user_id = 4
   WHERE user_id = p_user_id;
 
+  -- Insertar en el historial
   INSERT INTO user_historial (
     changed_user_id, maker_user_id, type_change_id,
     user_historial_date, user_historial_description,
@@ -1019,6 +1024,34 @@ BEGIN
   );
 END //
 
+CREATE PROCEDURE get_imgs (
+  IN id_init INT,
+  IN pagination_number INT
+)
+BEGIN
+  SELECT * FROM imgs
+  LIMIT id_init, pagination_number; -- Implementa la paginación
+END //
+
+CREATE PROCEDURE get_imgs_state (
+  IN id_init INT,
+  IN pagination_number INT,
+  IN p_state VARCHAR(10) -- Corregido: no usar comillas
+)
+BEGIN
+  SELECT * FROM imgs
+    WHERE state_objets_id = CAST(p_state AS UNSIGNED) -- Filtra por estado
+    LIMIT id_init, pagination_number; -- Implementa la paginación
+
+END //
+
+CREATE PROCEDURE get_imgs_by_id (
+  IN p_id INT
+)
+BEGIN 
+  SELECT * FROM imgs where imgs.imgs_id = p_id;
+END //
+
 DELIMITER ;
 
 -- Genders
@@ -1143,7 +1176,6 @@ CALL add_product (
 );
 
 
-
 CALL add_product (
   "camara tipo cabeza 180 deg",
   4,
@@ -1254,10 +1286,22 @@ CALL add_service_product (
 DROP USER IF EXISTS 'guest_your_place_safed'@'localhost'; 
 CREATE USER 'guest_your_place_safed'@'localhost' IDENTIFIED BY 'im a guest';
 GRANT EXECUTE ON PROCEDURE your_place_safed.get_user_by_credentials TO 'guest_your_place_safed'@'localhost';
+
 GRANT EXECUTE ON PROCEDURE your_place_safed.get_nav_active_with_imgs TO 'guest_your_place_safed'@'localhost';
+
 GRANT EXECUTE ON PROCEDURE your_place_safed.get_services_active TO 'guest_your_place_safed'@'localhost';
-GRANT EXECUTE ON PROCEDURE your_place_safed.get_services_by_discount_range TO 'guest_your_place_safed'@'localhost';
-GRANT EXECUTE ON PROCEDURE your_place_safed.get_service_active_products TO 'guest_your_place_safed'@'localhost';
-GRANT EXECUTE ON PROCEDURE your_place_safed.get_products_by_price_range TO 'guest_your_place_safed'@'localhost';
 GRANT EXECUTE ON PROCEDURE your_place_safed.get_state_services TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_services_by_discount_range TO 'guest_your_place_safed'@'localhost';
+
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_service_products_active TO 'guest_your_place_safed'@'localhost';
+
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_products_active TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_product_by_id TO 'guest_your_place_safed'@'localhost';
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_products_by_price_range TO 'guest_your_place_safed'@'localhost';
+
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_imgs_by_id TO 'guest_your_place_safed'@'localhost';
+
+GRANT EXECUTE ON PROCEDURE your_place_safed.get_service_products_service_id_state TO 'guest_your_place_safed'@'localhost';
+
+
 FLUSH PRIVILEGES;

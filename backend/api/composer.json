@@ -1,0 +1,15 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Controller\\": "Controller/",
+      "Modules\\": "Modules/",
+      "Utils\\": "core/",
+      "Connect\\": "core/"
+    },
+    "files": [
+      "core/Error.Utils.php"
+    ]
+  }
+
+}
+  

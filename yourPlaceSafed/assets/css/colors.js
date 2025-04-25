@@ -10,7 +10,7 @@ const colors = Object.freeze({
  ,800 : '#080e82'
  ,900 : '#0c0d6d'
  ,950 : '#000001'
- ,1000: '#010111'
+ ,1000: '#010111' 
 });
 
-export default colors;
+export { colors };

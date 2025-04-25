@@ -1,6 +1,7 @@
 import rutes from "./rute.json"
+import apiRest from "./apiRest.json"
 // Ruta local de tu servidor (XAMPP)
-const BASE_URL = 'http://' + rutes.host + 'getServices.php';
+const BASE_URL = 'http://' + rutes.host + apiRest.Services;
 
 export const getServices = async () => {
   try {

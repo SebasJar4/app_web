@@ -1,13 +1,17 @@
-#enviromental
+# Ignorar archivos de entorno
 .env
 key_ssh/
+*.log
+ignore.sh
 
-#back
-backend/logs
+# Ignorar logs del backend
+backend/logs/
+backend/.ignore
 
-#node
-node_modules
+# Ignorar node_modules
+node_modules/
 
-#yourPlaceSafed
-yourPlaceSafed/node_modules
+# Ignorar logs y node_modules de yourPlaceSafed
+yourPlaceSafed/logs/
+yourPlaceSafed/node_modules/
 yourPlaceSafed/package-lock.json

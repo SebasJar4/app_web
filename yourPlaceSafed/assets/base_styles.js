@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import colors  from "./css/colors";
+import { colors }  from "./css/colors";
 
 export const basicStyles = StyleSheet.create({
   view: {
