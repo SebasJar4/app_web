@@ -25,7 +25,8 @@ export default function NavList() {
   useEffect(() => {
     (async () => {
       const data = await getNavs();
-      console.log("Datos recibidos en navs navList:", data);
+      
+      // console.log("Datos recibidos en navs navList:", data);
   
       const navsWithUrl = data.map((item) => ({
         ...item,
@@ -99,6 +100,7 @@ export default function NavList() {
                       height: collapsed ? 30 : 24,
                       marginRight: 10,
                     }}
+                    resizeMode="contain"
                     onError={(err) => {
                       console.warn("Error al cargar imagen:", err.nativeEvent);
                     }}
@@ -131,7 +133,6 @@ const styles = StyleSheet.create({
     color: colors[50],
     padding: 16,
     alignSelf: "flex-end",
-    resizeMode: "contain",
   },
 
   iconContainer: {
@@ -143,13 +144,11 @@ const styles = StyleSheet.create({
   icon: {
     width: 100,
     height: 100,
-    resizeMode: "contain",
   },
 
   iconCollapsed: {
     width: 40,
     height: 40,
-    resizeMode: "contain",
   },
 
   header: {

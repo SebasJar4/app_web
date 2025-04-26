@@ -3,7 +3,7 @@
 import rutes from "./rute.json";
 import apiRest from "./apiRest.json";
 
-export const getImg = (imgPath) => {
+const getImg = (imgPath) => {
   if (!imgPath) return null;
   
   const cleanPath = imgPath.startsWith("/") ? imgPath : "/" + imgPath;
@@ -15,4 +15,4 @@ export const getImg = (imgPath) => {
   };
 };
 
-export { rutes };
+export { rutes , getImg };

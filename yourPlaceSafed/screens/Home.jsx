@@ -44,9 +44,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     fontWeight: "bold",
-    textShadowColor: colors[800],
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
+    textShadow: `${colors[800]} 1px 1px 2px`
   },
 
   container_carousel: {
