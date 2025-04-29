@@ -4,7 +4,7 @@
 require("./autoload_require.php");
 use Modules\ImgsModule;
 use function Utils\handle_error;
-
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Obtener el ID
@@ -27,7 +27,7 @@ try {
 try {
     $model = new ImgsModule();
     $result = $model->get_img_by_id($id);
-    $result["imgs_url"];
+    $model->mostrarJSON_without_encode( $result );
     
 } catch (\Throwable $th) {
     $error = "Error del endPoint relacionado con el json";

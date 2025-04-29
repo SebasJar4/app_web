@@ -1,34 +1,37 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { colors } from "../assets/css/colors";
-import CarruselComponent from "../utils/Carrusel_home"; 
+import Carrusel from "../utils/Carrousel"; 
 
 export default function Home() {
-
+  
   return (
-    <View style={styles.container}>
-      <View style={ styles.container_title }>
-        <Text style = { [ styles.title, styles.Text ] }> Bienvenido a la página principal </Text>
+    <ScrollView style={styles.container}>
+      <View style={{flex:1}}>
+        <View style={ styles.container_title }>
+          <Text style = { [ styles.title, styles.Text ] }> Bienvenido a la página principal </Text>
+        </View>
+        <View style={styles.container_carousel}>
+          <Carrusel />
+        </View> 
       </View>
-      <View style={styles.container_carousel}>
-        <CarruselComponent />
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: colors[700],
-    display: "flex"
+    flex: 1
+    ,width: "100%"
+    ,height: "auto"
+    ,padding: 20
+    ,backgroundColor: colors[800]
+    ,display: "flex"
     ,flexDirection: "colums"
   },
 
   container_title: {
      width: "100%"
-    ,backgroundColor: "#0003"
     ,height: "auto"
 
   },
@@ -38,19 +41,19 @@ const styles = StyleSheet.create({
   },
   
   Text: {
-    color: colors[200],
-    backgroundColor: colors[950] + "dd",
-    alignSelf: "center",
-    padding: 10,
-    borderRadius: 10,
-    fontWeight: "bold",
-    textShadow: `${colors[800]} 1px 1px 2px`
+    color: colors[200]
+   ,backgroundColor: colors[950] + "dd"
+   ,alignSelf: "center"
+   ,padding: 10
+   ,borderRadius: 10
+   ,fontWeight: "bold"
+   ,textShadow: `${colors[800]} 1px 1px 2px`
   },
 
   container_carousel: {
-     display: "flex"
-     ,flexDirection: "column"
-    ,backgroundColor: "#000"
+    flex:1
+    ,flexDirection: "column"
+    ,backgroundColor: "#0f0"
     ,marginTop: "2rem"
   }
 });

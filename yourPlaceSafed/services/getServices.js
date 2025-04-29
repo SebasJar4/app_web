@@ -8,7 +8,7 @@ export const getServices = async () => {
     const response = await fetch(BASE_URL);
     const data = await response.json();
     
-    //  console.log(data);
+    console.log(data);
     
     // Comprobamos si recibimos un array o un mensaje de error
     if (Array.isArray(data)) {

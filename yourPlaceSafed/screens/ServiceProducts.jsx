@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity, Modal, StyleSheet, ActivityIndicator } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { getServiceProducts } from "../services/getServiceProducts";
-import { getImg } from "../services/getImg";
+import { getImg, getImgById } from "../services/getImg";
+import { colors } from "../assets/css/colors";
 
 const ServiceProducts = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const { service_id, service_name } = route.params || {};
   
-  // Extraer service_id desde los parámetros de la navegación
-  const { service_id, service_name } = route.params || {}; // Asegúrate de que params está definido
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -24,18 +23,23 @@ const ServiceProducts = () => {
 
     const loadProducts = async () => {
       try {
-        const data = await getServiceProducts(service_id); // Llamada al servicio con service_id
-        console.log("Productos recibidos:", data);
-
-        const dataWithImages = data.map((product) => {
-          const imgData = getImg(product.imgs_id || ""); // Manejar casos donde imgs_id puede ser inválido
+        const data = await getServiceProducts({ service_id: service_id }); // Fetch products
+    
+        console.log(data);
+        
+        // Use Promise.all to wait for all image fetches to complete
+        const dataWithImages = await Promise.all(data.map(async (product) => {
+          const img_fetch = await getImgById(product.imgs_id); // Fetch image by ID
+          const imgData = getImg(img_fetch.imgs_url); // Get image data
           return {
             ...product,
-            imageUrl: imgData?.fullUrl || "", // Asignar una URL vacía si getImg devuelve null
+            imgs_url: imgData.fullUrl, // Set the image URL
+            isSvg: imgData.isSvg, // Set if the image is SVG
           };
-        });
-
-        setProducts(dataWithImages);
+        }));
+    
+        console.log(dataWithImages);
+        setProducts(dataWithImages); // Set the products state
       } catch (error) {
         console.error("Error al cargar productos:", error);
       } finally {
@@ -48,7 +52,7 @@ const ServiceProducts = () => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => setSelectedProduct(item)}>
-      <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      <Image source={{ uri: item.imgs_url }} style={styles.image} />
       <Text style={styles.name}>{item.producst_name}</Text>
       <Text style={styles.price}>${item.products_precio}</Text>
     </TouchableOpacity>
@@ -78,7 +82,7 @@ const ServiceProducts = () => {
         <View style={styles.modalContainer}>
           {selectedProduct && (
             <View style={styles.modalContent}>
-              <Image source={{ uri: selectedProduct.imageUrl }} style={styles.modalImage} />
+              <Image source={{ uri: selectedProduct.imgs_url }} style={styles.modalImage} />
               <Text style={styles.modalTitle}>{selectedProduct.producst_name}</Text>
               <Text style={styles.modalDescription}>{selectedProduct.products_description}</Text>
               <Text style={styles.modalPrice}>Precio: ${selectedProduct.products_precio}</Text>
@@ -94,15 +98,27 @@ const ServiceProducts = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f4f4f4" },
+  container: { flex: 1, backgroundColor: colors[900] },
   backButton: { padding: 10 },
-  backText: { fontSize: 16 },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
+  backText: { 
+    textAlign: "center"
+   ,fontSize: 16
+   ,backgroundColor: colors[300] 
+   ,padding: 10 
+   ,width: "auto"
+  },
+  title: { 
+    fontSize: 24
+   ,fontWeight: "bold"
+   ,textAlign: "center"
+   ,marginBottom: 10 
+   ,color: colors[100]
+  },
   list: { padding: 10 },
   card: {
     flex: 1,
     margin: 5,
-    backgroundColor: "#fff",
+    backgroundColor: colors[300],
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
@@ -111,8 +127,12 @@ const styles = StyleSheet.create({
   image: { width: 100, height: 100, resizeMode: "cover", borderRadius: 10 },
   name: { fontSize: 14, fontWeight: "bold", marginTop: 5 },
   price: { fontSize: 12, color: "#888" },
-  modalContainer: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center" },
-  modalContent: { margin: 20, padding: 20, backgroundColor: "#fff", borderRadius: 10, alignItems: "center" },
+  modalContainer: { 
+    flex: 1
+   ,backgroundColor: colors[1000] + "66"
+   ,justifyContent: "center" 
+  },
+  modalContent: { margin: 20, padding: 20, backgroundColor: colors[300], borderRadius: 10, alignItems: "center" },
   modalImage: { width: 200, height: 200, marginBottom: 10 },
   modalTitle: { fontSize: 20, fontWeight: "bold" },
   modalDescription: { fontSize: 14, marginVertical: 10 },

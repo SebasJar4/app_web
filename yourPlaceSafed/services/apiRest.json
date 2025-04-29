@@ -1,6 +1,7 @@
 {
    "Nav":"Controller/Nav.Controller.php"
   ,"Imgs":"Controller/Assets.Controller.php"
+  ,"Img_id":"Controller/Imgs.Controller.php"
   ,"Products":"Controller/Products.Controller.php"
   ,"Services":"Controller/Services.Controller.php"
   ,"ServiceProducts":"Controller/ServiceProducts.Controller.php"

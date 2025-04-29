@@ -1,6 +1,6 @@
 // Codigo reac-native
 import React, { useEffect, useState } from "react";
-import { View , StyleSheet , ScrollView } from "react-native";
+import { View , StyleSheet , ScrollView, Dimensions } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -25,8 +25,6 @@ import { colors } from "./assets/css/colors";
 
 const Stack = createNativeStackNavigator();
 
-
-
 export default function App() {
   const [routesFromDB, setRoutesFromDB] = useState([]);
 
@@ -43,7 +41,7 @@ export default function App() {
    <NavigationContainer>
     <View style={styles.appContainer}>
      
-     <NavList />
+     <NavList style={ styles.nav }/>
      
      <View style={styles.pageContent}>
        <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -72,10 +70,6 @@ export default function App() {
   );
 }
 
-//<ScrollView style={[ basicStyles.view ]}>
-//</ScrollView>
-
-
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1
@@ -86,5 +80,5 @@ const styles = StyleSheet.create({
     flex: 100
    ,backgroundColor: colors[900]
    ,paddingVertical: 10
-  },
+  }
 });

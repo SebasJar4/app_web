@@ -40,7 +40,7 @@ try {
 
     // Validate parameters
     if ($service_id <= 0) {
-        throw new Exception("The service_id provided is invalid or nonexistent. You need to send a valid id > 0.");
+        throw new Exception("The service_id provided is invalid " . $service_id . " or nonexistent. You need to send a valid id > 0.");
     }
     if ($state_id < 0) {
         throw new Exception("The state_id provided is invalid. It must be >= 0.");
@@ -64,6 +64,7 @@ try {
     
     // Return the result as JSON
     echo json_encode($result);
+    
 } catch (\Throwable $th) {
     $error = "Error in the endpoint related to JSON response";
     handle_error($error, $th);

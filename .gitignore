@@ -15,3 +15,6 @@ node_modules/
 yourPlaceSafed/logs/
 yourPlaceSafed/node_modules/
 yourPlaceSafed/package-lock.json
+yourPlaceSafed/.expo/
+
+yourPlaceSafed_old_npm/

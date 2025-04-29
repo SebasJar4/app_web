@@ -24,42 +24,41 @@ function validateParameters(parameters) {
     }
   }
 }
-
-// Servicio getServiceProducts
-export const getServiceProducts = async ( { service_id , page_n = null , pagination_n = null } ) => {
+export const getServiceProducts = async ({ service_id, page_n = null, pagination_n = null }) => {
   try {
-    // Construir el objeto JSON dinámicamente con valores de showServiceProducts
     const requestBody = {
-      service_id,
-      state_id: showServiceProducts.state_id,         // Uso de valores predeterminados de showServiceProducts
-      page_n: page_n || 1 ,
-      pagination_n: pagination_n || showServiceProducts.pagination_n, // Uso de valores predeterminados de showServiceProducts
+      service_id: service_id,
+      state_id: showServiceProducts.state_id,
+      page_n: page_n || 1,
+      pagination_n: pagination_n || showServiceProducts.pagination_n,
     };
 
-    // Validación del objeto creado
     validateParameters(requestBody);
 
-    const response = await fetch(
-      "http://" + rutes.host + apiRest.ServiceProducts,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
+    const url = "http://" + rutes.host + apiRest.ServiceProducts;
+
+    console.log(url, JSON.stringify(requestBody));
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
 
     if (!response.ok) {
       throw new Error(`Error en la solicitud: ${response.status}`);
     }
 
+    // Read the response body once and store it in a variable
     const data = await response.json();
-    return data;
+    console.log("-> ServiceProducts:", JSON.stringify(data, null, 2)); // Log the data correctly
+    
+    return data; // Return the data directly
+
   } catch (error) {
     console.error("Error al obtener service products:", error);
     return [];
   }
 };
-
-export { rutes };
